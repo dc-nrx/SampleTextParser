@@ -51,6 +51,7 @@
 		4F3DBEA72AB95677007D60B7 /* RomeoAndJulietUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomeoAndJulietUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		4F3DBEB52AB9754E007D60B7 /* RJCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = RJCore; path = Packages/RJCore; sourceTree = "<group>"; };
 		4F3DBEB62AB9766F007D60B7 /* RJServiceImplementations */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = RJServiceImplementations; path = Packages/RJServiceImplementations; sourceTree = "<group>"; };
+		4F3DBEB72AB97793007D60B7 /* RJViewModel */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = RJViewModel; path = Packages/RJViewModel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +134,7 @@
 		4F3DBEB42AB9754E007D60B7 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
+				4F3DBEB72AB97793007D60B7 /* RJViewModel */,
 				4F3DBEB52AB9754E007D60B7 /* RJCore */,
 				4F3DBEB62AB9766F007D60B7 /* RJServiceImplementations */,
 			);
