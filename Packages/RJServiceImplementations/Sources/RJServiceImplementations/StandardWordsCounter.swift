@@ -25,7 +25,7 @@ open class StandardWordsCounter: WordsCounter {
 				result[word.lowercased(), default: 0] += 1
 			}
 		}
-		[1,2].sort(by: <#T##(Int, Int) throws -> Bool#>)
+		
 		return result
 	}
 	
