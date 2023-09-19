@@ -24,31 +24,6 @@ public enum TextParserError: Error {
  */
 public typealias WordPostProcessor = (String) throws -> [String]?
 
-/**
- A rule to define what should be considered as single `word`.
- 
- In case of need, words can be split further after applying the initial pattern matching (see `WordPostProcessor`).
- */
-public enum MatchPattern {
-	
-	/// "1+" alphabetical characters (numbers excluded) separeted by anything else
-	case alphanumeric
-	
-	/// "1+" alphanumeric characters separeted by anything else
-	case alphabetical
-	
-	/**
-	 "1+" alphabetical characters, plus `'` and `-`, separeted by anything else.
-	 
-	 Good to handle words like "mother-in-law" ans "it's". For the latter, it may be useful to split it during the
-	 post-processing phase (see `WordPostProcessor`).
-	 */
-	case alphabeticWithDashesAndApostrophes
-	
-	// Extend with emoji containing words or whatever else
-	// ...
-}
-
 //TODO: Add max capacity associated type? (seems to be a bit too much)
 public protocol WordsCounter {
 	
@@ -64,6 +39,13 @@ public protocol WordsCounter {
 
 
 public extension WordsCounter {
+	
+	func countWords(
+		_ string: String,
+		matchPattern: MatchPattern
+	) async throws -> [String : UInt] {
+		try await countWords(string, matchPattern: matchPattern, wordPostProcessor: nil)
+	}
 	
 	func countWords(
 		textData: Data,
