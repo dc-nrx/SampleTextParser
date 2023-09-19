@@ -8,13 +8,11 @@
 import Foundation
 
 /**
- A rule to define what should be considered as single `word`.
+ A rule to define what should be considered as a single word.
  
  In case of need, words can be split further after applying the initial pattern matching (see `WordPostProcessor`).
- 
- `CaseIterable` conformace for unit testing purposes
  */
-public enum MatchPattern: CaseIterable {
+public enum MatchPattern {
 	
 	/// "1+" alphanumeric characters separeted by anything else
 	case alphanumeric
@@ -25,7 +23,7 @@ public enum MatchPattern: CaseIterable {
 	 Good to handle words like "mother-in-law" ans "it's". For the latter, it may be useful to split it during the
 	 post-processing phase (see `WordPostProcessor`).
 	 */
-	case alphabeticWithDashesAndApostrophes
+	case alphanumericWithDashesAndApostrophes
 	
 	// Extend with emoji containing words or whatever else
 	// ...
@@ -39,10 +37,12 @@ public extension MatchPattern {
 		switch self {
 		case .alphanumeric:
 			wordPattern = "[\\p{L}\\p{N}]+"
-		case .alphabeticWithDashesAndApostrophes:
+		case .alphanumericWithDashesAndApostrophes:
 			wordPattern = "\\b[\\p{L}'-]+\\b"
 		}
 		return try! NSRegularExpression(pattern: wordPattern, options: [])
 	}
 }
 
+/// `CaseIterable` conformace for unit testing purposes.
+extension MatchPattern: CaseIterable { }

@@ -17,13 +17,6 @@ public enum TextParserError: Error {
 	//...
 }
 
-/**
- Used to split the words further according to some specific rules. (e.g. "it's" -> ["it", "is"].
- 
- Return nil if no action required.
- */
-public typealias WordPostProcessor = (String) throws -> [String]?
-
 //TODO: Add max capacity associated type? (seems to be a bit too much)
 public protocol WordsCounter {
 	

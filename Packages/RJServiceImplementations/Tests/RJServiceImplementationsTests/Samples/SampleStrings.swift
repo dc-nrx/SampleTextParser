@@ -69,7 +69,10 @@ enum SampleString: String {
 	case wordsWithApostrophes = "it's they're"
 	
 	/// 2 different words - words separated by newline character
-	case wordsSeparatedByNewLine = "hello\nworld"
+	case wordsSeparatedByNewLine = """
+	hello
+	world
+"""
 	
 	// Can (and possibly should - depending on use cases) be extended furhter
 	// with various types of apostrophes, exotic unicode characters etc.

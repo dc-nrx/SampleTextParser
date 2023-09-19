@@ -1,12 +1,13 @@
 import XCTest
+import RJCore
 @testable import RJServiceImplementations
 
 final class RJServiceImplementationsTests: XCTestCase {
 	
-	var sut: WordsCounterImpl!
+	var sut: (any WordsCounter)!
 	
 	override func setUp() async throws {
-		sut = WordsCounterImpl()
+		sut = StandardWordsCounter()
 	}
 	
 	override func tearDown() async throws {
@@ -149,7 +150,7 @@ final class RJServiceImplementationsTests: XCTestCase {
 	}
 	
 	func testHyphenatedWordsAlphanumericWithDashesAndApostrophes() async throws {
-		let res = try await sut.countWords(SampleString.hyphenatedWords.rawValue, matchPattern: .alphabeticWithDashesAndApostrophes)
+		let res = try await sut.countWords(SampleString.hyphenatedWords.rawValue, matchPattern: .alphanumericWithDashesAndApostrophes)
 		XCTAssertEqual(res["mother-in-law"], 1)
 		XCTAssertEqual(res["father-in-law"], 1)
 		
@@ -161,7 +162,7 @@ final class RJServiceImplementationsTests: XCTestCase {
 	}
 
 	func testWordsWithApostrophesAlphanumericWithDashesAndApostrophes() async throws {
-		let res = try await sut.countWords(SampleString.wordsWithApostrophes.rawValue, matchPattern: .alphabeticWithDashesAndApostrophes)
+		let res = try await sut.countWords(SampleString.wordsWithApostrophes.rawValue, matchPattern: .alphanumericWithDashesAndApostrophes)
 		XCTAssertEqual(res["it's"], 1)
 		XCTAssertEqual(res["they're"], 1)
 		
@@ -194,4 +195,9 @@ final class RJServiceImplementationsTests: XCTestCase {
 
 	}
 
+	func testWordsSeparatedByNewlinesAlphanumeric() async throws {
+		let res = try await sut.countWords(SampleString.wordsSeparatedByNewLine.rawValue, matchPattern: .alphanumeric)
+		XCTAssertEqual(res["hello"], 1)
+		XCTAssertEqual(res["world"], 1)
+	}
 }
