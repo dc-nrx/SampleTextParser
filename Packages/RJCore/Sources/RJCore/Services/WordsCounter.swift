@@ -17,6 +17,7 @@ public enum TextParserError: Error {
 	//...
 }
 
+public typealias WordFrequencyMap = [String: UInt]
 //TODO: Add max capacity associated type? (seems to be a bit too much)
 public protocol WordsCounter {
 	
@@ -27,7 +28,7 @@ public protocol WordsCounter {
 		_ string: String,
 		matchPattern: MatchPattern,
 		wordPostProcessor: WordPostProcessor?
-	) async throws -> [String: UInt]
+	) async throws -> WordFrequencyMap
 }
 
 
@@ -36,7 +37,7 @@ public extension WordsCounter {
 	func countWords(
 		_ string: String,
 		matchPattern: MatchPattern
-	) async throws -> [String : UInt] {
+	) async throws -> WordFrequencyMap {
 		try await countWords(string, matchPattern: matchPattern, wordPostProcessor: nil)
 	}
 	
@@ -45,7 +46,7 @@ public extension WordsCounter {
 		encoding: String.Encoding = .utf8,
 		matchPattern: MatchPattern = .alphanumeric,
 		wordPostProcessor: WordPostProcessor? = nil
-	) async throws -> [String: UInt] {
+	) async throws -> WordFrequencyMap {
 		//TODO: Use async version
 		guard let string = String(data: textData, encoding: encoding) else {
 			throw TextParserError.parseFailed

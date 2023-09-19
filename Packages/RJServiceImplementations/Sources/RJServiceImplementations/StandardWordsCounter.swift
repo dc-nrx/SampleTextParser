@@ -10,8 +10,8 @@ open class StandardWordsCounter: WordsCounter {
 		_ string: String,
 		matchPattern: MatchPattern,
 		wordPostProcessor: WordPostProcessor?
-	) async throws -> [String : UInt] {
-		var result = [String: UInt]()
+	) async throws -> WordFrequencyMap {
+		var result = WordFrequencyMap()
 		let allStringRange = NSRange(string.startIndex..., in: string)
 		for match in matchPattern.regex.matches(in: string, range: allStringRange) {
 			let range = Range(match.range, in: string)! // the reason for o(n^2)
@@ -25,6 +25,7 @@ open class StandardWordsCounter: WordsCounter {
 				result[word.lowercased(), default: 0] += 1
 			}
 		}
+		[1,2].sort(by: <#T##(Int, Int) throws -> Bool#>)
 		return result
 	}
 	
