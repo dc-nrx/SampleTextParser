@@ -9,7 +9,7 @@ import Foundation
 
 public enum WordFrequencyIndexKey {
 	case alphabetical
-	case frequency
+	case mostFrequent
 }
 
 public protocol WordFrequencyIndexBuilder where WordFrequencyMap.Key: Comparable {
