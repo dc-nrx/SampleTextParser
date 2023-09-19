@@ -29,7 +29,7 @@ public enum MatchPattern {
 }
 
 //TODO: Add max capacity associated type? (seems to be a bit too much)
-public protocol WordCounter {
+public protocol WordsCounter {
 	
 	/**
 	 Count words in the string.
@@ -41,7 +41,7 @@ public protocol WordCounter {
 }
 
 
-public extension WordCounter {
+public extension WordsCounter {
 	
 	func countWords(
 		textData: Data,
