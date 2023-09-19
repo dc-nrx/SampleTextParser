@@ -11,7 +11,7 @@ enum SampleString: String {
 	/// 3 same words + 1 different
 	case simpleEngLowercased = "one two three two"
 	/// 3 same words + 1 different
-	case simpleEngMixCase = "one tWo three two"
+	case simpleEngMixCase = "oNE tWo three two"
 	/// 0 words
 	case zeroLength = ""
 	/// 0 words
