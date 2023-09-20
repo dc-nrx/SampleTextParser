@@ -99,7 +99,6 @@ private extension WordsFrequencyVM {
 		}
 	}
 	
-	//TODO: Make a property wrapper @AsyncVar
 	func lazilyLoadedFrequencyMap() async throws -> WordFrequencyMap {
 		if let frequencyMapCache { return frequencyMapCache }
 		
