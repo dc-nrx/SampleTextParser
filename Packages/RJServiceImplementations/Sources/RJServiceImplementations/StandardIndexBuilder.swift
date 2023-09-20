@@ -10,6 +10,8 @@ import RJCore
 
 open class StandardIndexBuilder: WordFrequencyIndexBuilder {
 	
+	public init() { }
+	
 	open func build(
 		_ frequencyMap: WordFrequencyMap,
 		index: WordFrequencyIndexKey

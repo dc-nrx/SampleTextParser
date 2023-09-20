@@ -12,7 +12,7 @@ final class MatchPatternTests: XCTestCase {
 	
 	func testAllCases_regexInitializedSuccessfully() throws {
 		for pattern in MatchPattern.allCases {
-			XCTAssertNotNil(pattern)
+			XCTAssertNotNil(pattern.regex)
 		}
     }
 

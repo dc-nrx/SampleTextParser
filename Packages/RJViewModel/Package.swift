@@ -12,7 +12,8 @@ let package = Package(
             targets: ["RJViewModel"]),
     ],
     dependencies: [
-		.package(path: "../RJCore")
+		.package(path: "../RJCore"),
+		.package(path: "../RJServiceImplementations")
     ],
     targets: [
         .target(
@@ -20,6 +21,6 @@ let package = Package(
             dependencies: ["RJCore"]),
         .testTarget(
             name: "RJViewModelTests",
-            dependencies: ["RJViewModel"]),
+            dependencies: ["RJViewModel", "RJServiceImplementations"]),
     ]
 )
