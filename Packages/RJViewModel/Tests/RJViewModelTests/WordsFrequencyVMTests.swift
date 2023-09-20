@@ -1,17 +1,30 @@
 import XCTest
 import RJCore
 import RJServiceImplementations
+import Combine
 @testable import RJViewModel
 
 final class RJViewModelTests: XCTestCase {
 	
-	var wordsCounter: WordsCounter { StandardWordsCounter() }
-	var indexBuilder: WordFrequencyIndexBuilder { StandardIndexBuilder() }
-	var analytics: Analytics { AnalyticsMock() }
+	var cancellables: Set<AnyCancellable>!
 	
 	let samples = [
 		"abc abc abc aaa ddd"
 	]
+
+	var wordsCounter: WordsCounter { StandardWordsCounter() }
+	var indexBuilder: WordFrequencyIndexBuilder { StandardIndexBuilder() }
+	var analytics: Analytics { AnalyticsMock() }
+		
+	override func setUp() {
+		super.setUp()
+		cancellables = []
+	}
+
+	override func tearDown() {
+		super.tearDown()
+		cancellables = nil
+	}
 	
 	func testOnIndexKeyChanged() {
 		let sut = makeSut(samples[0])
@@ -22,7 +35,22 @@ final class RJViewModelTests: XCTestCase {
 		sut.onIndexKeyChanged(.alphabetical)
 		XCTAssertEqual(sut.indexKey, .alphabetical)
 	}
-	 
+	
+	func testRegularFlow_stateChanges() async {
+		let sut = makeSut(samples[0])
+		let exp = expectation(description: "All expected states in right order after onAppear call")
+		var states = [WordsFrequencyVM.State]()
+		sut.state.sink { state in
+			states.append(state)
+			if states == [.initial, .updateStarted, .countingWords, .buildingIndex, .updatingRows, .finished] {
+				exp.fulfill()
+			}
+		}
+		.store(in: &cancellables)
+		
+		sut.onAppear()
+		await fulfillment(of: [exp])
+	}
 }
 
 private extension RJViewModelTests {

@@ -3,6 +3,15 @@ import Foundation
 import RJCore
 import Combine
 
+public extension WordsFrequencyVM {
+	
+	enum State: Equatable {
+		case initial, updateStarted, countingWords, buildingIndex, updatingRows, finished, error(description: String)
+	}
+	
+	typealias Item = (word: WordFrequencyMap.Key, frequency: WordFrequencyMap.Value)
+}
+
 public final class WordsFrequencyVM {
 	
 	// MARK: - Public
@@ -10,21 +19,10 @@ public final class WordsFrequencyVM {
 	//TODO: Make var / clear cache on change
 	public let data: Data
 	
-	public var indexKey: WordFrequencyIndexKey = .mostFrequent {
-		didSet {
-			if oldValue != indexKey {
-				loadData(for: indexKey)
-			}
-		}
-	}
-	
-	public enum State: Equatable {
-		case initial, updateStarted, countingWords, buildingIndex, updatingRows, finished, error(description: String)
-	}
+	public private(set) var indexKey: WordFrequencyIndexKey
+
 	public private(set) var state = CurrentValueSubject<State, Never>(.initial)
-	
-	public typealias Item = (word: WordFrequencyMap.Key, frequency: WordFrequencyMap.Value)
-	public private(set) var rowItems = [Item]()
+	public private(set) var rowItems = CurrentValueSubject<[Item], Never>([])
 		
 	// MARK: - Private
 	typealias IndexTable = [WordFrequencyMap.Key]
@@ -40,12 +38,14 @@ public final class WordsFrequencyVM {
 		_ data: Data,
 		wordCounter: WordsCounter,
 		indexBuilder: WordFrequencyIndexBuilder,
-		analytics: Analytics
+		analytics: Analytics,
+		initialIndexKey: WordFrequencyIndexKey = .mostFrequent
 	) {
 		self.data = data
 		self.wordCounter = wordCounter
 		self.indexBuilder = indexBuilder
 		self.analytics = analytics
+		self.indexKey = initialIndexKey
 	}
 
 }
@@ -59,7 +59,10 @@ public extension WordsFrequencyVM {
 	}
 	
 	func onIndexKeyChanged(_ newKey: WordFrequencyIndexKey) {
-		indexKey = newKey
+		if indexKey != newKey {
+			indexKey = newKey
+			loadData(for: indexKey)
+		}
 	}
 }
 
@@ -84,10 +87,11 @@ private extension WordsFrequencyVM {
 				let indexTable = await lazilyLoadedIndex(frequencyMap, newKey)
 				
 				state.send(.updatingRows)
-				rowItems = try indexTable.map { word in
+				let updatedItems = try indexTable.map { word in
 					guard let frequency = frequencyMap[word] else { throw GenericError.unexpectedNil(file: #file, line: #line) }
 					return Item(word: word, frequency: frequency)
 				}
+				rowItems.send(updatedItems)
 				state.send(.finished)
 			} catch {
 				handle(error: error)
