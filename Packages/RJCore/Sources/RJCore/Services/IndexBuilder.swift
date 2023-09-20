@@ -18,6 +18,6 @@ public protocol WordFrequencyIndexBuilder where WordFrequencyMap.Key: Comparable
 	func build(
 		_ frequencyMap: WordFrequencyMap,
 		index: WordFrequencyIndexKey
-	) -> [WordFrequencyMap.Key]
+	) async -> [WordFrequencyMap.Key]
 	
 }

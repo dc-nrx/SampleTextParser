@@ -30,16 +30,6 @@ final class WordPostProcessorTests: XCTestCase {
 	}
 
 	func testPostProcess_splitWordsWithSingleApostrophe() async throws {
-		
-		/// More complex rules such as "t": "not" (which also involve preceding word processing) are omited here.
-		let endingsMap = [
-			"s": "is",
-			"re": "are",
-			"ve": "have",
-			"ll": "will",
-			"d": "would"
-		]
-		
 		let res = try await sut.countWords(SampleString.wordsWithApostrophes.rawValue,
 										   matchPattern: .alphanumericWithDashesAndApostrophes,
 										   wordPostProcessor: CommonWordPostProcessors.endingsExtractor)

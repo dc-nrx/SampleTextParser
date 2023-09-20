@@ -13,7 +13,7 @@ open class StandardIndexBuilder: WordFrequencyIndexBuilder {
 	open func build(
 		_ frequencyMap: WordFrequencyMap,
 		index: WordFrequencyIndexKey
-	) -> [WordFrequencyMap.Key] {
+	) async -> [WordFrequencyMap.Key] {
 		switch index {
 		case .alphabetical:
 			return frequencyMap.keys
