@@ -12,10 +12,14 @@ final class RJViewModelTests: XCTestCase {
 		"abc abc abc aaa ddd"
 	]
 
+	let initialStateSequence: [WordsFrequencyVM.State] = [.initial, .updateStarted, .countingWords, .buildingIndex, .updatingRows, .finished]
+	let wordsCountedNoIndexStateSequence: [WordsFrequencyVM.State] = [.finished, .updateStarted, .buildingIndex, .updatingRows, .finished]
+	let allCachedSequence: [WordsFrequencyVM.State] = [.finished, .updateStarted, .updatingRows, .finished]
+	
 	var wordsCounter: WordsCounter { StandardWordsCounter() }
 	var indexBuilder: WordFrequencyIndexBuilder { StandardIndexBuilder() }
 	var analytics: Analytics { AnalyticsMock() }
-		
+	
 	override func setUp() {
 		super.setUp()
 		cancellables = []
@@ -24,6 +28,12 @@ final class RJViewModelTests: XCTestCase {
 	override func tearDown() {
 		super.tearDown()
 		cancellables = nil
+	}
+	
+	func testInititalValues() {
+		let sut = makeSut(samples[0])
+		XCTAssertTrue(sut.rowItems.value.isEmpty)
+		XCTAssertEqual(sut.state.value, .initial)
 	}
 	
 	func testOnIndexKeyChanged() {
@@ -38,35 +48,39 @@ final class RJViewModelTests: XCTestCase {
 	
 	func testRegularFlow_stateChanges() async {
 		let sut = makeSut(samples[0])
-		let exp = expectation(description: "All expected states in right order after onAppear call")
-		var states = [WordsFrequencyVM.State]()
-		sut.state.sink { state in
-			states.append(state)
-			if states == [.initial, .updateStarted, .countingWords, .buildingIndex, .updatingRows, .finished] {
-				exp.fulfill()
-			}
-		}
-		.store(in: &cancellables)
 		
+		let exp1 = expectCorrectStatesSequence(sut, initialStateSequence)
 		sut.onAppear()
-		await fulfillment(of: [exp])
+		await fulfillment(of: [exp1], timeout: 0.1)
+
+		let exp2 = expectCorrectStatesSequence(sut, wordsCountedNoIndexStateSequence)
+		sut.onIndexKeyChanged(.alphabetical)
+		await fulfillment(of: [exp2], timeout: 0.1)
 	}
 	
 	func testIndexChange_afterInitialLoad() async {
 		let sut = makeSut(samples[0])
-		XCTAssertTrue(sut.rowItems.value.isEmpty)
 		
 		let exp1 = expectFinishedState(sut)
 		sut.onAppear()
 		await fulfillment(of: [exp1])
-		
 		XCTAssertEqual(sut.rowItems.value.map { $0.frequency }, [3, 1, 1])
 		
 		let exp2 = expectFinishedState(sut)
 		sut.onIndexKeyChanged(.alphabetical)
-		await fulfillment(of: [exp2])
-		
+		await fulfillment(of: [exp2], timeout: 0.1)
 		XCTAssertEqual(sut.rowItems.value.map { $0.word }, ["aaa", "abc", "ddd"])
+	}
+	
+	func testMultipleEventCalls_correctStateChanges() async {
+		let sut = makeSut(samples[0])
+		
+		let exp = expectCorrectStatesSequence(sut, initialStateSequence)
+		sut.onAppear()
+		sut.onAppear()
+		sut.onAppear()
+		await fulfillment(of: [exp], timeout: 0.1)
+		XCTAssertEqual(sut.rowItems.value.map { $0.frequency }, [3, 1, 1])
 	}
 }
 
@@ -77,7 +91,7 @@ private extension RJViewModelTests {
 	}
 	
 	func makeSut(data: Data) -> WordsFrequencyVM {
-		WordsFrequencyVM(data, wordCounter: wordsCounter, indexBuilder: indexBuilder, analytics: analytics)
+		WordsFrequencyVM(data, wordCounter: wordsCounter, indexBuilder: indexBuilder, analytics: analytics, initialIndexKey: .mostFrequent)
 	}
 
 	func expectFinishedState(_ sut: WordsFrequencyVM) -> XCTestExpectation {
@@ -92,13 +106,9 @@ private extension RJViewModelTests {
 	
 	func expectCorrectStatesSequence(
 		_ sut: WordsFrequencyVM,
-		includeInitial: Bool = true
+		_ expectedSequence: [WordsFrequencyVM.State]
 	) -> XCTestExpectation {
-		let exp = expectation(description: "All expected states in right order after onAppear call")
-		var expectedSequence: [WordsFrequencyVM.State] = includeInitial ? [.initial] : []
-		expectedSequence.append(contentsOf: [.initial, .updateStarted, .countingWords, .buildingIndex, .updatingRows, .finished])
-		
-		var states = [WordsFrequencyVM.State]()
+		let exp = expectation(description: "Expect \(expectedSequence) state sequence")
 		sut.state
 			.collect(expectedSequence.count)
 			.filter { $0 == expectedSequence }
@@ -106,5 +116,12 @@ private extension RJViewModelTests {
 			.sink { _ in exp.fulfill() }
 			.store(in: &cancellables)
 		return exp
+	}
+	
+	/// A helper function to fix broken tests
+	func printStateChanges(_ sut: WordsFrequencyVM) {
+		sut.state
+			.sink { print("state changed to \($0)") }
+			.store(in: &cancellables)
 	}
 }
