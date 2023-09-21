@@ -7,6 +7,7 @@ import Combine
 final class RJViewModelTests: XCTestCase {
 	
 	var cancellables: Set<AnyCancellable>!
+	var sut: WordsFrequencyVM!
 	
 	let samples = [
 		"abc abc abc aaa ddd"
@@ -82,6 +83,14 @@ final class RJViewModelTests: XCTestCase {
 		await fulfillment(of: [exp], timeout: 0.1)
 		XCTAssertEqual(sut.rowItems.value.map { $0.frequency }, [3, 1, 1])
 	}
+	
+	// TODO: implement bunch of tests for error reporting and recovery from
+	func testErrorHandling() async {
+		
+	}
+	
+	// TODO: implement tests for data change & mix with error cases
+	// TODO: implement & test analytics calls
 }
 
 private extension RJViewModelTests {

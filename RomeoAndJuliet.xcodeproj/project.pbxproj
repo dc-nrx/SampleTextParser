@@ -7,10 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4F326AE42ABC523600FB2048 /* RJViewModel in Frameworks */ = {isa = PBXBuildFile; productRef = 4F326AE32ABC523600FB2048 /* RJViewModel */; };
+		4F326AE82ABC52BD00FB2048 /* Romeo-and-Juliet.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4F326AE72ABC52BD00FB2048 /* Romeo-and-Juliet.txt */; };
+		4F326AEA2ABC574D00FB2048 /* RJServiceImplementations in Frameworks */ = {isa = PBXBuildFile; productRef = 4F326AE92ABC574D00FB2048 /* RJServiceImplementations */; };
 		4F3DBE852AB95676007D60B7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3DBE842AB95676007D60B7 /* AppDelegate.swift */; };
 		4F3DBE872AB95676007D60B7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3DBE862AB95676007D60B7 /* SceneDelegate.swift */; };
-		4F3DBE892AB95676007D60B7 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3DBE882AB95676007D60B7 /* ViewController.swift */; };
-		4F3DBE8C2AB95676007D60B7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F3DBE8A2AB95676007D60B7 /* Main.storyboard */; };
+		4F3DBE892AB95676007D60B7 /* WordsFrequencyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3DBE882AB95676007D60B7 /* WordsFrequencyVC.swift */; };
+		4F3DBE8C2AB95676007D60B7 /* WordsFrequencyVC.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F3DBE8A2AB95676007D60B7 /* WordsFrequencyVC.storyboard */; };
 		4F3DBE8E2AB95677007D60B7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F3DBE8D2AB95677007D60B7 /* Assets.xcassets */; };
 		4F3DBE912AB95677007D60B7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F3DBE8F2AB95677007D60B7 /* LaunchScreen.storyboard */; };
 		4F3DBE9C2AB95677007D60B7 /* RomeoAndJulietTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3DBE9B2AB95677007D60B7 /* RomeoAndJulietTests.swift */; };
@@ -36,11 +39,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4F326AE72ABC52BD00FB2048 /* Romeo-and-Juliet.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Romeo-and-Juliet.txt"; sourceTree = "<group>"; };
 		4F3DBE812AB95676007D60B7 /* RomeoAndJuliet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RomeoAndJuliet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F3DBE842AB95676007D60B7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4F3DBE862AB95676007D60B7 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		4F3DBE882AB95676007D60B7 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		4F3DBE8B2AB95676007D60B7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		4F3DBE882AB95676007D60B7 /* WordsFrequencyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordsFrequencyVC.swift; sourceTree = "<group>"; };
+		4F3DBE8B2AB95676007D60B7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/WordsFrequencyVC.storyboard; sourceTree = "<group>"; };
 		4F3DBE8D2AB95677007D60B7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4F3DBE902AB95677007D60B7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4F3DBE922AB95677007D60B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -59,6 +63,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4F326AEA2ABC574D00FB2048 /* RJServiceImplementations in Frameworks */,
+				4F326AE42ABC523600FB2048 /* RJViewModel in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -79,6 +85,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4F326AE22ABC523600FB2048 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		4F326AE52ABC528900FB2048 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				4F3DBE882AB95676007D60B7 /* WordsFrequencyVC.swift */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		4F326AE62ABC529700FB2048 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4F326AE72ABC52BD00FB2048 /* Romeo-and-Juliet.txt */,
+				4F3DBE8D2AB95677007D60B7 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		4F3DBE782AB95675007D60B7 = {
 			isa = PBXGroup;
 			children = (
@@ -87,6 +117,7 @@
 				4F3DBE9A2AB95677007D60B7 /* RomeoAndJulietTests */,
 				4F3DBEA42AB95677007D60B7 /* RomeoAndJulietUITests */,
 				4F3DBE822AB95676007D60B7 /* Products */,
+				4F326AE22ABC523600FB2048 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -103,11 +134,11 @@
 		4F3DBE832AB95676007D60B7 /* RomeoAndJuliet */ = {
 			isa = PBXGroup;
 			children = (
+				4F326AE62ABC529700FB2048 /* Resources */,
+				4F326AE52ABC528900FB2048 /* ViewController */,
 				4F3DBE842AB95676007D60B7 /* AppDelegate.swift */,
 				4F3DBE862AB95676007D60B7 /* SceneDelegate.swift */,
-				4F3DBE882AB95676007D60B7 /* ViewController.swift */,
-				4F3DBE8A2AB95676007D60B7 /* Main.storyboard */,
-				4F3DBE8D2AB95677007D60B7 /* Assets.xcassets */,
+				4F3DBE8A2AB95676007D60B7 /* WordsFrequencyVC.storyboard */,
 				4F3DBE8F2AB95677007D60B7 /* LaunchScreen.storyboard */,
 				4F3DBE922AB95677007D60B7 /* Info.plist */,
 			);
@@ -157,6 +188,10 @@
 			dependencies = (
 			);
 			name = RomeoAndJuliet;
+			packageProductDependencies = (
+				4F326AE32ABC523600FB2048 /* RJViewModel */,
+				4F326AE92ABC574D00FB2048 /* RJServiceImplementations */,
+			);
 			productName = RomeoAndJuliet;
 			productReference = 4F3DBE812AB95676007D60B7 /* RomeoAndJuliet.app */;
 			productType = "com.apple.product-type.application";
@@ -247,7 +282,8 @@
 			files = (
 				4F3DBE912AB95677007D60B7 /* LaunchScreen.storyboard in Resources */,
 				4F3DBE8E2AB95677007D60B7 /* Assets.xcassets in Resources */,
-				4F3DBE8C2AB95676007D60B7 /* Main.storyboard in Resources */,
+				4F326AE82ABC52BD00FB2048 /* Romeo-and-Juliet.txt in Resources */,
+				4F3DBE8C2AB95676007D60B7 /* WordsFrequencyVC.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,7 +308,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4F3DBE892AB95676007D60B7 /* ViewController.swift in Sources */,
+				4F3DBE892AB95676007D60B7 /* WordsFrequencyVC.swift in Sources */,
 				4F3DBE852AB95676007D60B7 /* AppDelegate.swift in Sources */,
 				4F3DBE872AB95676007D60B7 /* SceneDelegate.swift in Sources */,
 			);
@@ -311,12 +347,12 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		4F3DBE8A2AB95676007D60B7 /* Main.storyboard */ = {
+		4F3DBE8A2AB95676007D60B7 /* WordsFrequencyVC.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				4F3DBE8B2AB95676007D60B7 /* Base */,
 			);
-			name = Main.storyboard;
+			name = WordsFrequencyVC.storyboard;
 			sourceTree = "<group>";
 		};
 		4F3DBE8F2AB95677007D60B7 /* LaunchScreen.storyboard */ = {
@@ -456,7 +492,7 @@
 				INFOPLIST_FILE = RomeoAndJuliet/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIMainStoryboardFile = WordsFrequencyVC;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -484,7 +520,7 @@
 				INFOPLIST_FILE = RomeoAndJuliet/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIMainStoryboardFile = WordsFrequencyVC;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -616,6 +652,17 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4F326AE32ABC523600FB2048 /* RJViewModel */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = RJViewModel;
+		};
+		4F326AE92ABC574D00FB2048 /* RJServiceImplementations */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = RJServiceImplementations;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 4F3DBE792AB95675007D60B7 /* Project object */;
 }

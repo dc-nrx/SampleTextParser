@@ -31,14 +31,14 @@ public final class WordsFrequencyVM {
 	
 	private var wordCounter: WordsCounter
 	private var indexBuilder: WordFrequencyIndexBuilder
-	private var analytics: Analytics
+	private var analytics: Analytics?
 		
 	// MARK: - Init
 	public init(
 		_ data: Data,
 		wordCounter: WordsCounter,
 		indexBuilder: WordFrequencyIndexBuilder,
-		analytics: Analytics,
+		analytics: Analytics? = nil,
 		initialIndexKey: WordFrequencyIndexKey = .mostFrequent
 	) {
 		self.data = data
@@ -122,7 +122,7 @@ private extension WordsFrequencyVM {
 	
 	func handle(error: Error) {
 		state.send(.error(description: error.localizedDescription))
-		analytics.error(error)
+		analytics?.error(error)
 	}
 }
 
