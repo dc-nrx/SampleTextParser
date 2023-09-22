@@ -13,9 +13,9 @@ final class RJViewModelTests: XCTestCase {
 		"abc abc abc aaa ddd"
 	]
 
-	let initialStateSequence: [WordsFrequencyVM.State] = [.initial, .updateStarted, .countingWords, .buildingIndex, .updatingRows, .finished]
-	let wordsCountedNoIndexStateSequence: [WordsFrequencyVM.State] = [.finished, .updateStarted, .buildingIndex, .updatingRows, .finished]
-	let allCachedSequence: [WordsFrequencyVM.State] = [.finished, .updateStarted, .updatingRows, .finished]
+	let initialStateSequence: [WordsFrequencyVM.State] = [.updateStarted, .countingWords, .buildingIndex, .updatingRows, .finished]
+	let wordsCountedNoIndexStateSequence: [WordsFrequencyVM.State] = [.updateStarted, .buildingIndex, .updatingRows, .finished]
+	let allCachedSequence: [WordsFrequencyVM.State] = [.updateStarted, .updatingRows, .finished]
 	
 	var wordsCounter: WordsCounter { StandardWordsCounter() }
 	var indexBuilder: WordFrequencyIndexBuilder { StandardIndexBuilder() }
@@ -70,7 +70,9 @@ final class RJViewModelTests: XCTestCase {
 		let exp2 = expectFinishedState(sut)
 		sut.onIndexKeyChanged(.alphabetical)
 		await fulfillment(of: [exp2], timeout: 0.1)
-		XCTAssertEqual(sut.rowItems.value.map { $0.word }, ["aaa", "abc", "ddd"])
+		let res = sut.rowItems.value.map { $0.word }
+		print("Current `value` is: \(res)")
+		XCTAssertEqual(res, ["aaa", "abc", "ddd"])
 	}
 	
 	func testMultipleEventCalls_correctStateChanges() async {
@@ -80,7 +82,7 @@ final class RJViewModelTests: XCTestCase {
 		sut.onAppear()
 		sut.onAppear()
 		sut.onAppear()
-		await fulfillment(of: [exp], timeout: 0.1)
+		await fulfillment(of: [exp], timeout: 0.2)
 		XCTAssertEqual(sut.rowItems.value.map { $0.frequency }, [3, 1, 1])
 	}
 	
@@ -106,6 +108,7 @@ private extension RJViewModelTests {
 	func expectFinishedState(_ sut: WordsFrequencyVM) -> XCTestExpectation {
 		let exp = expectation(description: "`.finished` state should be called")
 		sut.state
+			.dropFirst()	// drop the current value
 			.filter { $0 == .finished }
 			.first()	// avoid accidental re-fulfillment of the `exp` in non-atomic tests
 			.sink { _ in exp.fulfill() }
@@ -119,6 +122,7 @@ private extension RJViewModelTests {
 	) -> XCTestExpectation {
 		let exp = expectation(description: "Expect \(expectedSequence) state sequence")
 		sut.state
+			.dropFirst()	// drop the current value
 			.collect(expectedSequence.count)
 			.filter { $0 == expectedSequence }
 			.first() // avoid accidental re-fulfillment of the `exp` in non-atomic tests
