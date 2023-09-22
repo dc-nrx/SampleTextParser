@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "RJCore",
-	platforms: [.iOS(.v13), .macOS(.v12)],
+	platforms: [.iOS(.v14), .macOS(.v12)],
     products: [
         .library(
             name: "RJServices",

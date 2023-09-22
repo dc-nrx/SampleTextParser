@@ -6,10 +6,13 @@
 //
 
 import Foundation
+import OSLog
+
 import RJServices
 
-//TODO: Add RJServiceImplementations as second target to RJCore
 open class StandardIndexBuilder: WordFrequencyIndexBuilder {
+
+	private let logger = Logger(subsystem: "RJImplementations", category: "StandardIndexBuilder")
 	
 	public init() { }
 	
@@ -17,6 +20,9 @@ open class StandardIndexBuilder: WordFrequencyIndexBuilder {
 		_ frequencyMap: WordFrequencyMap,
 		index: WordFrequencyIndexKey
 	) async -> [WordFrequencyMap.Key] {
+		logger.debug("Start building `\(index.rawValue)` index...")
+		defer { logger.debug("Building `\(index.rawValue)` index finished.") }
+		
 		switch index {
 		case .alphabetical:
 			return frequencyMap.keys

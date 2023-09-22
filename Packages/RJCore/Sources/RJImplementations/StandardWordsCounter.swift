@@ -1,7 +1,11 @@
 import Foundation
+import OSLog
+
 import RJServices
 
 open class StandardWordsCounter: WordsCounter {
+	
+	private let logger = Logger(subsystem: "RJImplementations", category: "StandardWordsCounter")
 	
 	public init() { }
 	
@@ -11,6 +15,7 @@ open class StandardWordsCounter: WordsCounter {
 		matchPattern: MatchPattern,
 		wordPostProcessor: WordPostProcessor?
 	) async throws -> WordFrequencyMap {
+		logger.debug("Count started for \(string.prefix(16))...")
 		var result = WordFrequencyMap()
 		let allStringRange = NSRange(string.startIndex..., in: string)
 		for match in matchPattern.regex.matches(in: string, range: allStringRange) {
@@ -18,6 +23,7 @@ open class StandardWordsCounter: WordsCounter {
 			let word = string[range]
 			if let postProcessor = wordPostProcessor,
 			   let wordsAfterSplit = try postProcessor(String(word)) {
+				logger.info("Post-processing: \(word) -> \(wordsAfterSplit)")
 				for subWord in wordsAfterSplit {
 					result[subWord.lowercased(), default: 0] += 1
 				}
@@ -25,7 +31,7 @@ open class StandardWordsCounter: WordsCounter {
 				result[word.lowercased(), default: 0] += 1
 			}
 		}
-		
+		logger.debug("Finishing count of \(string.prefix(16))...")
 		return result
 	}
 	

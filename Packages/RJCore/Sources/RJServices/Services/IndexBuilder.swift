@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum WordFrequencyIndexKey {
+public enum WordFrequencyIndexKey: String {
 	case alphabetical
 	case mostFrequent
 }
