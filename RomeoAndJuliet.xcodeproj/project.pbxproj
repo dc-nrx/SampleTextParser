@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		4F326AE42ABC523600FB2048 /* RJViewModel in Frameworks */ = {isa = PBXBuildFile; productRef = 4F326AE32ABC523600FB2048 /* RJViewModel */; };
-		4F326AE82ABC52BD00FB2048 /* Romeo-and-Juliet.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4F326AE72ABC52BD00FB2048 /* Romeo-and-Juliet.txt */; };
 		4F3DBE852AB95676007D60B7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3DBE842AB95676007D60B7 /* AppDelegate.swift */; };
 		4F3DBE872AB95676007D60B7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3DBE862AB95676007D60B7 /* SceneDelegate.swift */; };
 		4F3DBE892AB95676007D60B7 /* WordsFrequencyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3DBE882AB95676007D60B7 /* WordsFrequencyVC.swift */; };
@@ -19,6 +18,7 @@
 		4F3DBEA62AB95677007D60B7 /* RomeoAndJulietUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3DBEA52AB95677007D60B7 /* RomeoAndJulietUITests.swift */; };
 		4F3DBEA82AB95677007D60B7 /* RomeoAndJulietUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3DBEA72AB95677007D60B7 /* RomeoAndJulietUITestsLaunchTests.swift */; };
 		4FC896F52ABD855A00AD807F /* RJImplementations in Frameworks */ = {isa = PBXBuildFile; productRef = 4FC896F42ABD855A00AD807F /* RJImplementations */; };
+		4FF142CA2ABDDE13006BC1EE /* RJResources in Frameworks */ = {isa = PBXBuildFile; productRef = 4FF142C92ABDDE13006BC1EE /* RJResources */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,7 +39,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		4F326AE72ABC52BD00FB2048 /* Romeo-and-Juliet.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "Romeo-and-Juliet.txt"; sourceTree = "<group>"; };
 		4F3DBE812AB95676007D60B7 /* RomeoAndJuliet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RomeoAndJuliet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4F3DBE842AB95676007D60B7 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4F3DBE862AB95676007D60B7 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -63,6 +62,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4FC896F52ABD855A00AD807F /* RJImplementations in Frameworks */,
+				4FF142CA2ABDDE13006BC1EE /* RJResources in Frameworks */,
 				4F326AE42ABC523600FB2048 /* RJViewModel in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -102,7 +102,6 @@
 		4F326AE62ABC529700FB2048 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				4F326AE72ABC52BD00FB2048 /* Romeo-and-Juliet.txt */,
 				4F3DBE8D2AB95677007D60B7 /* Assets.xcassets */,
 			);
 			path = Resources;
@@ -189,6 +188,7 @@
 			packageProductDependencies = (
 				4F326AE32ABC523600FB2048 /* RJViewModel */,
 				4FC896F42ABD855A00AD807F /* RJImplementations */,
+				4FF142C92ABDDE13006BC1EE /* RJResources */,
 			);
 			productName = RomeoAndJuliet;
 			productReference = 4F3DBE812AB95676007D60B7 /* RomeoAndJuliet.app */;
@@ -280,7 +280,6 @@
 			files = (
 				4F3DBE912AB95677007D60B7 /* LaunchScreen.storyboard in Resources */,
 				4F3DBE8E2AB95677007D60B7 /* Assets.xcassets in Resources */,
-				4F326AE82ABC52BD00FB2048 /* Romeo-and-Juliet.txt in Resources */,
 				4F3DBE8C2AB95676007D60B7 /* WordsFrequencyVC.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -659,6 +658,10 @@
 		4FC896F42ABD855A00AD807F /* RJImplementations */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = RJImplementations;
+		};
+		4FF142C92ABDDE13006BC1EE /* RJResources */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = RJResources;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

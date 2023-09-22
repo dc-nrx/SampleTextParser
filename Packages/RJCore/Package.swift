@@ -13,6 +13,9 @@ let package = Package(
 		.library(
 			  name: "RJImplementations",
 			  targets: ["RJImplementations"]),
+		.library(
+			  name: "RJResources",
+			  targets: ["RJResources"]),
     ],
     dependencies: [],
     targets: [
@@ -22,8 +25,12 @@ let package = Package(
 		.target(
 			  name: "RJImplementations",
 			  dependencies: ["RJServices"]),
+		.target(
+			  name: "RJResources",
+			  dependencies: [],
+			  resources: [.process("Resources")]),
         .testTarget(
             name: "RJCoreTests",
-            dependencies: ["RJServices", "RJImplementations"]),
+            dependencies: ["RJServices", "RJImplementations", "RJResources"]),
     ]
 )

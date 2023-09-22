@@ -11,6 +11,7 @@ import Combine
 import RJServices
 import RJViewModel
 import RJImplementations
+import RJResources
 
 class WordsFrequencyVC: UIViewController {
 	
@@ -43,9 +44,8 @@ class WordsFrequencyVC: UIViewController {
 	}
 	
 	private static var testVM: WordsFrequencyVM {
-		let filepath = Bundle.main.path(forResource: "Romeo-and-Juliet", ofType: "txt")!
-		let data = try! Data(contentsOf: URL(fileURLWithPath: filepath))
-		return WordsFrequencyVM(data, wordCounter: StandardWordsCounter(), indexBuilder: StandardIndexBuilder())
+		let str = try! String(contentsOfFile: TextFile.romeoAndJuliet.path)
+		return WordsFrequencyVM(str, wordCounter: StandardWordsCounter(), indexBuilder: StandardIndexBuilder())
 	}
 	
 	private func setupBindings() {

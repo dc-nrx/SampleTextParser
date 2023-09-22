@@ -1,8 +1,10 @@
 import XCTest
+
 import RJServices
 import RJImplementations
+import RJResources
 
-final class RJServiceImplementationsTests: XCTestCase {
+final class WordsCounterImplTests: XCTestCase {
 	
 	var sut: (any WordsCounter)!
 	
@@ -208,5 +210,14 @@ final class RJServiceImplementationsTests: XCTestCase {
 		let res = try await sut.countWords(SampleString.wordsSeparatedByNewLine.rawValue, matchPattern: .alphanumeric)
 		XCTAssertEqual(res["hello"], 1)
 		XCTAssertEqual(res["world"], 1)
+	}
+	
+	func testFileProcessing_AlphanumericWithDashesAndApostrophes() async throws {
+		let fileString = try String(contentsOfFile: TextFile.romeoAndJuliet.path)
+		let res = try await sut.countWords(fileString, matchPattern: .alphanumericWithDashesAndApostrophes)
+		
+		XCTAssertNotNil(res["’tis"])
+		XCTAssertNotNil(res["grave-beseeming"])
+		XCTAssertNotNil(res["let’s"])
 	}
 }

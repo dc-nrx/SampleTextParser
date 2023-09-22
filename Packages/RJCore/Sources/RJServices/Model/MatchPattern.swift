@@ -14,7 +14,7 @@ import Foundation
  
  In case of need, words can be split further after applying the initial pattern matching (see `WordPostProcessor`).
  */
-public enum MatchPattern {
+public enum MatchPattern: String {
 	
 	/// "1+" alphanumeric characters separeted by anything else
 	case alphanumeric
@@ -40,7 +40,7 @@ public extension MatchPattern {
 		case .alphanumeric:
 			wordPattern = "[\\p{L}\\p{N}]+"
 		case .alphanumericWithDashesAndApostrophes:
-			wordPattern = "\\b[\\p{L}’'`-]+\\b"
+			wordPattern = "(?<=\\W|^)[\\p{L}’'`-]+(?=\\W|$)"
 		}
 		return try! NSRegularExpression(pattern: wordPattern, options: [])
 	}

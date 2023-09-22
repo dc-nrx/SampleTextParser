@@ -43,7 +43,7 @@ public extension WordsCounter {
 	
 	func countWords(
 		textData: Data,
-		encoding: String.Encoding = .isoLatin2,
+		encoding: String.Encoding = .utf8,
 		matchPattern: MatchPattern = .alphanumeric,
 		wordPostProcessor: WordPostProcessor? = nil
 	) async throws -> WordFrequencyMap {

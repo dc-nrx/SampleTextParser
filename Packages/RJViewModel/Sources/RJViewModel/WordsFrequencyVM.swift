@@ -27,7 +27,7 @@ public final class WordsFrequencyVM {
 	
 	// MARK: - Public
 	//TODO: Make var / clear cache on change
-	public let data: Data
+	public let text: String
 	
 	public private(set) var indexKey: WordFrequencyIndexKey
 	public private(set) var postProcessRule: WordPostProcessor?
@@ -50,13 +50,13 @@ public final class WordsFrequencyVM {
 	
 	// MARK: - Init
 	public init(
-		_ data: Data,
+		_ text: String,
 		wordCounter: WordsCounter,
 		indexBuilder: WordFrequencyIndexBuilder,
 		analytics: Analytics? = nil,
 		initialIndexKey: WordFrequencyIndexKey = .mostFrequent
 	) {
-		self.data = data
+		self.text = text
 		self.wordCounter = wordCounter
 		self.indexBuilder = indexBuilder
 		self.analytics = analytics
@@ -124,7 +124,7 @@ private extension WordsFrequencyVM {
 		
 		state.send(.countingWords)
 		//TODO: Make match pattern a parameter
-		let result = try await wordCounter.countWords(textData: data, matchPattern: .alphanumericWithDashesAndApostrophes, wordPostProcessor: postProcessRule)
+		let result = try await wordCounter.countWords(text, matchPattern: .alphanumericWithDashesAndApostrophes, wordPostProcessor: postProcessRule)
 		frequencyMapCache = result
 		return result
 	}

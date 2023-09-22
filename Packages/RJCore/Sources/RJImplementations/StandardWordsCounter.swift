@@ -15,7 +15,7 @@ open class StandardWordsCounter: WordsCounter {
 		matchPattern: MatchPattern,
 		wordPostProcessor: WordPostProcessor?
 	) async throws -> WordFrequencyMap {
-		logger.debug("Count started for \(string.prefix(16))...")
+		logger.debug("Count started for \(string.prefix(16))...; matchPattern = \(matchPattern.rawValue)")
 		var result = WordFrequencyMap()
 		let allStringRange = NSRange(string.startIndex..., in: string)
 		for match in matchPattern.regex.matches(in: string, range: allStringRange) {
