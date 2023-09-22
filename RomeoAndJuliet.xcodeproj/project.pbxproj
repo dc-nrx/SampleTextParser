@@ -112,10 +112,10 @@
 		4F3DBE782AB95675007D60B7 = {
 			isa = PBXGroup;
 			children = (
-				4F3DBEB42AB9754E007D60B7 /* Packages */,
 				4F3DBE832AB95676007D60B7 /* RomeoAndJuliet */,
 				4F3DBE9A2AB95677007D60B7 /* RomeoAndJulietTests */,
 				4F3DBEA42AB95677007D60B7 /* RomeoAndJulietUITests */,
+				4F3DBEB42AB9754E007D60B7 /* Packages */,
 				4F3DBE822AB95676007D60B7 /* Products */,
 				4F326AE22ABC523600FB2048 /* Frameworks */,
 			);
