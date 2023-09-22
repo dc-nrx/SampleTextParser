@@ -82,8 +82,6 @@ extension WordsFrequencyVC {
 // MARK: - Private
 private extension WordsFrequencyVC {
 	
-	
-	
 }
 
 // MARK: - Protocol Conformance

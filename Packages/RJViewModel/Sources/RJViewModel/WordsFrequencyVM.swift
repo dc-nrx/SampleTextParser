@@ -8,7 +8,16 @@ import RJServices
 public extension WordsFrequencyVM {
 	
 	enum State: Equatable {
-		case initial, updateStarted, countingWords, buildingIndex, updatingRows, finished, reset, error(description: String)
+		case initial, updateStarted, countingWords, buildingIndex, updatingRows, finished, cancelled, reset, error(description: String)
+		
+		var updateInProgress: Bool {
+			switch self {
+			case .initial, .finished, .cancelled, .reset, .error(_):
+				return false
+			default:
+				return true
+			}
+		}
 	}
 	
 	typealias Item = (word: WordFrequencyMap.Key, frequency: WordFrequencyMap.Value)
@@ -37,7 +46,8 @@ public final class WordsFrequencyVM {
 	
 	private var cancellables = Set<AnyCancellable>()
 	private let logger = Logger(subsystem: "RJViewModel", category: "WordsFrequencyVM")
-		
+	private var updateTask: Task<Void, Never>? = nil
+	
 	// MARK: - Init
 	public init(
 		_ data: Data,
@@ -80,28 +90,29 @@ private extension WordsFrequencyVM {
 	
 	// MARK: - Logic
 	
-	private var updateInProgress: Bool {
-		if state.value == .initial || state.value == .finished { return false }
-		else if case .error(_) = state.value { return false }
-		else { return true }
-	}
-
 	//TODO: Add cancellation before each step
 	func loadData(for newKey: WordFrequencyIndexKey) {
-		guard !updateInProgress else { return }
+		guard !state.value.updateInProgress else { return }
+		
 		state.send(.updateStarted)
-		Task {
+		updateTask = Task { [weak self] in
+			guard let self else { return }
 			do {
-				let frequencyMap = try await lazilyLoadedFrequencyMap()
-				let indexTable = await lazilyLoadedIndex(frequencyMap, newKey)
+				let frequencyMap = try await self.lazilyLoadedFrequencyMap()
+				let indexTable = await self.lazilyLoadedIndex(frequencyMap, newKey)
+				guard !Task.isCancelled else {
+					self.state.send(.cancelled)
+					return
+				}
 				
-				state.send(.updatingRows)
+				self.state.send(.updatingRows)
 				let updatedItems = try indexTable.map { word in
 					guard let frequency = frequencyMap[word] else { throw GenericError.unexpectedNil(file: #file, line: #line) }
 					return Item(word: word, frequency: frequency)
 				}
-				rowItems.send(updatedItems)
-				state.send(.finished)
+
+				self.rowItems.send(updatedItems)
+				self.state.send(.finished)
 			} catch {
 				handle(error: error)
 			}
@@ -155,6 +166,7 @@ private extension WordsFrequencyVM {
 		
 		rowItems.sink { [weak self] items in
 			self?.logger.debug("\(items.count) row items sent")
+			self?.logger.info("Items = \(items.prefix(8))(...)")
 		}
 		.store(in: &cancellables)
 	}
