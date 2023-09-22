@@ -8,16 +8,22 @@ let package = Package(
 	platforms: [.iOS(.v13), .macOS(.v12)],
     products: [
         .library(
-            name: "RJCore",
-            targets: ["RJCore"]),
+            name: "RJServices",
+            targets: ["RJServices"]),
+		.library(
+			  name: "RJImplementations",
+			  targets: ["RJImplementations"]),
     ],
     dependencies: [],
     targets: [
         .target(
-            name: "RJCore",
+            name: "RJServices",
             dependencies: []),
+		.target(
+			  name: "RJImplementations",
+			  dependencies: ["RJServices"]),
         .testTarget(
             name: "RJCoreTests",
-            dependencies: ["RJCore"]),
+            dependencies: ["RJServices", "RJImplementations"]),
     ]
 )

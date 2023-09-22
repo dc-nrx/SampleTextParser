@@ -5,7 +5,7 @@
 //  Created by Dmytro Chapovskyi on 20.09.2023.
 //
 
-import RJCore
+import RJServices
 import Foundation
 
 class AnalyticsMock: Analytics {

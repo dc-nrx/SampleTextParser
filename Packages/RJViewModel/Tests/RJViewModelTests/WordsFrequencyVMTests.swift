@@ -1,6 +1,6 @@
 import XCTest
-import RJCore
-import RJServiceImplementations
+import RJServices
+import RJImplementations
 import Combine
 @testable import RJViewModel
 

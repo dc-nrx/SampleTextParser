@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import RJCore
+import RJServices
 
 //TODO: Add RJServiceImplementations as second target to RJCore
 open class StandardIndexBuilder: WordFrequencyIndexBuilder {

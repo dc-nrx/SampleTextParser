@@ -13,14 +13,17 @@ let package = Package(
     ],
     dependencies: [
 		.package(path: "../RJCore"),
-		.package(path: "../RJServiceImplementations")
     ],
     targets: [
         .target(
             name: "RJViewModel",
-            dependencies: ["RJCore"]),
+			dependencies: [.product(name: "RJServices", package: "RJCore")]),
         .testTarget(
             name: "RJViewModelTests",
-            dependencies: ["RJViewModel", "RJServiceImplementations"]),
+            dependencies: [
+				"RJViewModel",
+				.product(name: "RJServices", package: "RJCore"),
+				.product(name: "RJImplementations", package: "RJCore"),				
+			])
     ]
 )

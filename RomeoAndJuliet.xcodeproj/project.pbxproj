@@ -9,7 +9,6 @@
 /* Begin PBXBuildFile section */
 		4F326AE42ABC523600FB2048 /* RJViewModel in Frameworks */ = {isa = PBXBuildFile; productRef = 4F326AE32ABC523600FB2048 /* RJViewModel */; };
 		4F326AE82ABC52BD00FB2048 /* Romeo-and-Juliet.txt in Resources */ = {isa = PBXBuildFile; fileRef = 4F326AE72ABC52BD00FB2048 /* Romeo-and-Juliet.txt */; };
-		4F326AEA2ABC574D00FB2048 /* RJServiceImplementations in Frameworks */ = {isa = PBXBuildFile; productRef = 4F326AE92ABC574D00FB2048 /* RJServiceImplementations */; };
 		4F3DBE852AB95676007D60B7 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3DBE842AB95676007D60B7 /* AppDelegate.swift */; };
 		4F3DBE872AB95676007D60B7 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3DBE862AB95676007D60B7 /* SceneDelegate.swift */; };
 		4F3DBE892AB95676007D60B7 /* WordsFrequencyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3DBE882AB95676007D60B7 /* WordsFrequencyVC.swift */; };
@@ -19,6 +18,7 @@
 		4F3DBE9C2AB95677007D60B7 /* RomeoAndJulietTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3DBE9B2AB95677007D60B7 /* RomeoAndJulietTests.swift */; };
 		4F3DBEA62AB95677007D60B7 /* RomeoAndJulietUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3DBEA52AB95677007D60B7 /* RomeoAndJulietUITests.swift */; };
 		4F3DBEA82AB95677007D60B7 /* RomeoAndJulietUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3DBEA72AB95677007D60B7 /* RomeoAndJulietUITestsLaunchTests.swift */; };
+		4FC896F52ABD855A00AD807F /* RJImplementations in Frameworks */ = {isa = PBXBuildFile; productRef = 4FC896F42ABD855A00AD807F /* RJImplementations */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -54,7 +54,6 @@
 		4F3DBEA52AB95677007D60B7 /* RomeoAndJulietUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomeoAndJulietUITests.swift; sourceTree = "<group>"; };
 		4F3DBEA72AB95677007D60B7 /* RomeoAndJulietUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomeoAndJulietUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		4F3DBEB52AB9754E007D60B7 /* RJCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = RJCore; path = Packages/RJCore; sourceTree = "<group>"; };
-		4F3DBEB62AB9766F007D60B7 /* RJServiceImplementations */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = RJServiceImplementations; path = Packages/RJServiceImplementations; sourceTree = "<group>"; };
 		4F3DBEB72AB97793007D60B7 /* RJViewModel */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = RJViewModel; path = Packages/RJViewModel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -63,7 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4F326AEA2ABC574D00FB2048 /* RJServiceImplementations in Frameworks */,
+				4FC896F52ABD855A00AD807F /* RJImplementations in Frameworks */,
 				4F326AE42ABC523600FB2048 /* RJViewModel in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -167,7 +166,6 @@
 			children = (
 				4F3DBEB72AB97793007D60B7 /* RJViewModel */,
 				4F3DBEB52AB9754E007D60B7 /* RJCore */,
-				4F3DBEB62AB9766F007D60B7 /* RJServiceImplementations */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
@@ -190,7 +188,7 @@
 			name = RomeoAndJuliet;
 			packageProductDependencies = (
 				4F326AE32ABC523600FB2048 /* RJViewModel */,
-				4F326AE92ABC574D00FB2048 /* RJServiceImplementations */,
+				4FC896F42ABD855A00AD807F /* RJImplementations */,
 			);
 			productName = RomeoAndJuliet;
 			productReference = 4F3DBE812AB95676007D60B7 /* RomeoAndJuliet.app */;
@@ -658,9 +656,9 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = RJViewModel;
 		};
-		4F326AE92ABC574D00FB2048 /* RJServiceImplementations */ = {
+		4FC896F42ABD855A00AD807F /* RJImplementations */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = RJServiceImplementations;
+			productName = RJImplementations;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

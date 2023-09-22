@@ -1,6 +1,6 @@
 import XCTest
-import RJCore
-@testable import RJServiceImplementations
+import RJServices
+import RJImplementations
 
 final class RJServiceImplementationsTests: XCTestCase {
 	

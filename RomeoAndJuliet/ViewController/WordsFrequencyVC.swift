@@ -6,11 +6,11 @@
 //
 
 import UIKit
-import RJCore
-import RJViewModel
 import Combine
 
-import RJServiceImplementations
+import RJServices
+import RJViewModel
+import RJImplementations
 
 class WordsFrequencyVC: UIViewController {
 	
@@ -50,14 +50,14 @@ class WordsFrequencyVC: UIViewController {
 	
 	private func setupBindings() {
 		vm.state
-			.receive(on: DispatchSerialQueue.main)
+			.receive(on: DispatchQueue.main)
 			.sink { [weak self] state in
 				self?.updateStateLabel(with: state)
 			}
 			.store(in: &cancellables)
 		
 		vm.rowItems
-			.receive(on: DispatchSerialQueue.main)
+			.receive(on: DispatchQueue.main)
 			.sink { [weak self] items in
 				self?.tableView.reloadData()
 			}

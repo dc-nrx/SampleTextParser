@@ -1,8 +1,9 @@
 
 import Foundation
-import RJCore
 import Combine
 import OSLog
+
+import RJServices
 
 public extension WordsFrequencyVM {
 	

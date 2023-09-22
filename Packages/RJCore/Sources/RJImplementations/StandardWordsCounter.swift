@@ -1,5 +1,5 @@
 import Foundation
-import RJCore
+import RJServices
 
 open class StandardWordsCounter: WordsCounter {
 	

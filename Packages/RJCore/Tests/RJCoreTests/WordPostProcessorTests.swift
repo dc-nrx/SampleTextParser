@@ -6,8 +6,8 @@
 //
 
 import XCTest
-import RJCore
-import RJServiceImplementations
+import RJServices
+import RJImplementations
 
 final class WordPostProcessorTests: XCTestCase {
 
