@@ -8,16 +8,7 @@ import RJServices
 public extension WordsFrequencyVM {
 	
 	enum State: Equatable {
-		case initial, updateStarted, countingWords, buildingIndex, updatingRows, finished, cancelled, reset, error(description: String)
-		
-		var updateInProgress: Bool {
-			switch self {
-			case .initial, .finished, .cancelled, .reset, .error(_):
-				return false
-			default:
-				return true
-			}
-		}
+		case initial, updateStarted, countingWords, buildingIndex, updatingRows, finished, cancelled, error(description: String)
 	}
 	
 	typealias Item = (word: WordFrequencyMap.Key, frequency: WordFrequencyMap.Value)
@@ -90,31 +81,36 @@ private extension WordsFrequencyVM {
 	
 	// MARK: - Logic
 	
-	//TODO: Add cancellation before each step
 	func loadData(for newKey: WordFrequencyIndexKey) {
-		guard !state.value.updateInProgress else { return }
+		guard updateTask == nil else { return }
 		
 		state.send(.updateStarted)
 		updateTask = Task { [weak self] in
 			guard let self else { return }
+			
+			defer { updateTask = nil }
 			do {
 				let frequencyMap = try await self.lazilyLoadedFrequencyMap()
+				guard !Task.isCancelled else { throw CancellationError() }
+
 				let indexTable = await self.lazilyLoadedIndex(frequencyMap, newKey)
-				guard !Task.isCancelled else {
-					self.state.send(.cancelled)
-					return
-				}
+				guard !Task.isCancelled else { throw CancellationError() }
 				
 				self.state.send(.updatingRows)
 				let updatedItems = try indexTable.map { word in
 					guard let frequency = frequencyMap[word] else { throw GenericError.unexpectedNil(file: #file, line: #line) }
 					return Item(word: word, frequency: frequency)
 				}
+				guard !Task.isCancelled else { throw CancellationError() }
 
 				self.rowItems.send(updatedItems)
 				self.state.send(.finished)
 			} catch {
-				handle(error: error)
+				if error is CancellationError {
+					state.send(.cancelled)
+				} else {
+					handle(error: error)
+				}
 			}
 		}
 	}
@@ -138,15 +134,37 @@ private extension WordsFrequencyVM {
 		return result
 	}
 
-	// MARK: - Misc
+	// MARK: - Reset
+	
+	func requestReset() async {
+		if let updateTask {
+			updateTask.cancel()
+			self.updateTask = nil
+			await waitForCancelledState()
+		}
+		reset()
+	}
 	
 	func reset() {
 		indexTablesCache = [WordFrequencyIndexKey: IndexTable]()
 		frequencyMapCache = nil
 		rowItems.send([])
-		state.send(.reset)
+		state.send(.initial)
 	}
 	
+	func waitForCancelledState() async {
+		await withCheckedContinuation { continuation in
+			state
+				.dropFirst()
+				.filter { $0 == .cancelled}
+				.first()
+				.sink { _ in continuation.resume() }
+				.store(in: &cancellables)
+		}
+	}
+
+	// MARK: - Misc
+
 	func handle(error: Error) {
 		let userMessage = error.localizedDescription
 		state.send(.error(description: userMessage))

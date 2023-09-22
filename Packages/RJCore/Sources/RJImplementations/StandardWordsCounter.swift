@@ -15,6 +15,21 @@ open class StandardWordsCounter: WordsCounter {
 		matchPattern: MatchPattern,
 		wordPostProcessor: WordPostProcessor?
 	) async throws -> WordFrequencyMap {
+		return try await withCheckedThrowingContinuation { continuation in
+			do {
+				let result = try syncCountWords(string, matchPattern: matchPattern, wordPostProcessor: wordPostProcessor)
+				continuation.resume(returning: result)
+			} catch {
+				continuation.resume(throwing: error)
+			}			
+		}
+	}
+	
+	private func syncCountWords(
+		_ string: String,
+		matchPattern: MatchPattern,
+		wordPostProcessor: WordPostProcessor?
+	) throws -> WordFrequencyMap {
 		logger.debug("Count started for \(string.prefix(16))...; matchPattern = \(matchPattern.rawValue)")
 		var result = WordFrequencyMap()
 		let allStringRange = NSRange(string.startIndex..., in: string)
@@ -34,5 +49,4 @@ open class StandardWordsCounter: WordsCounter {
 		logger.debug("Finishing count of \(string.prefix(16))...")
 		return result
 	}
-	
 }

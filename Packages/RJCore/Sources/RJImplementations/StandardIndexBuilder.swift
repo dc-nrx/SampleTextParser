@@ -20,17 +20,20 @@ open class StandardIndexBuilder: WordFrequencyIndexBuilder {
 		_ frequencyMap: WordFrequencyMap,
 		index: WordFrequencyIndexKey
 	) async -> [WordFrequencyMap.Key] {
-		logger.debug("Start building `\(index.rawValue)` index...")
-		defer { logger.debug("Building `\(index.rawValue)` index finished.") }
-		
-		switch index {
-		case .alphabetical:
-			return frequencyMap.keys
-				.sorted(by: <)
-		case .mostFrequent:
-			return frequencyMap
-				.sorted { $0.value > $1.value }
-				.map { $0.key }
+		return await withCheckedContinuation { continuation in
+			logger.debug("Start building `\(index.rawValue)` index...")
+			defer { logger.debug("Building `\(index.rawValue)` index finished.") }
+			
+			let result: [WordFrequencyMap.Key]
+			switch index {
+			case .alphabetical:
+				result = frequencyMap.keys.sorted(by: <)
+			case .mostFrequent:
+				result = frequencyMap
+					.sorted { $0.value > $1.value }
+					.map { $0.key }
+			}
+			continuation.resume(returning: result)
 		}
 	}
 	

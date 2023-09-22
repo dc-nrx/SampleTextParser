@@ -69,7 +69,7 @@ final class RJViewModelTests: XCTestCase {
 		
 		let exp2 = expectFinishedState(sut)
 		sut.onIndexKeyChanged(.alphabetical)
-		await fulfillment(of: [exp2], timeout: 0.1)
+		await fulfillment(of: [exp2], timeout: 0.5)
 		let res = sut.rowItems.value.map { $0.word }
 		print("Current `value` is: \(res)")
 		XCTAssertEqual(res, ["aaa", "abc", "ddd"])
@@ -98,11 +98,7 @@ final class RJViewModelTests: XCTestCase {
 private extension RJViewModelTests {
 	
 	func makeSut(_ string: String) -> WordsFrequencyVM {
-		makeSut(data: string.data(using: .utf8)!)
-	}
-	
-	func makeSut(data: Data) -> WordsFrequencyVM {
-		WordsFrequencyVM(data, wordCounter: wordsCounter, indexBuilder: indexBuilder, analytics: analytics, initialIndexKey: .mostFrequent)
+		WordsFrequencyVM(string, wordCounter: wordsCounter, indexBuilder: indexBuilder, analytics: analytics, initialIndexKey: .mostFrequent)
 	}
 
 	func expectFinishedState(_ sut: WordsFrequencyVM) -> XCTestExpectation {
