@@ -8,26 +8,31 @@
 import UIKit
 import RJCore
 import RJViewModel
+import Combine
 
 import RJServiceImplementations
 
 class WordsFrequencyVC: UIViewController {
 	
 	@IBOutlet var indexSegmentControl: UISegmentedControl!
+	@IBOutlet var stateLabel: UILabel!
 	@IBOutlet var tableView: UITableView!
 
 	let vm: WordsFrequencyVM
 	
+	private var cancellables = Set<AnyCancellable>()
+	
 	init(vm: WordsFrequencyVM) {
 		self.vm = vm
-//		self.vm = WordsFrequencyVC.testVM
 
 		super.init()
+		self.setupBindings()
 	}
 	
 	required init?(coder: NSCoder) {
 		self.vm = WordsFrequencyVC.testVM
 		super.init(coder: coder)
+		self.setupBindings()
 //		fatalError("init(coder:) has not been implemented")
 	}
 	
@@ -39,11 +44,50 @@ class WordsFrequencyVC: UIViewController {
 	
 	private static var testVM: WordsFrequencyVM {
 		let filepath = Bundle.main.path(forResource: "Romeo-and-Juliet", ofType: "txt")!
-		let data = try! Data(contentsOf: URL(fileURLWithPath: filepath)) //String(contentsOfFile: filepath)
+		let data = try! Data(contentsOf: URL(fileURLWithPath: filepath))
 		return WordsFrequencyVM(data, wordCounter: StandardWordsCounter(), indexBuilder: StandardIndexBuilder())
+	}
+	
+	private func setupBindings() {
+		vm.state
+			.receive(on: DispatchSerialQueue.main)
+			.sink { [weak self] state in
+				self?.updateStateLabel(with: state)
+			}
+			.store(in: &cancellables)
+		
+		vm.rowItems
+			.receive(on: DispatchSerialQueue.main)
+			.sink { [weak self] items in
+				self?.tableView.reloadData()
+			}
+			.store(in: &cancellables)
+	}
+	
+	private func updateStateLabel(with state: WordsFrequencyVM.State) {
+		stateLabel.text = "\(state)"
 	}
 }
 
+extension WordsFrequencyVC {
+	
+	// MARK: - Actions
+	@IBAction func onIndexSelectionChanged(sender: UISegmentedControl) {
+		// TODO: make proper map & setup initial
+		let indexKey: WordFrequencyIndexKey = sender.selectedSegmentIndex == 0 ? .mostFrequent : .alphabetical
+		vm.onIndexKeyChanged(indexKey)
+	}
+}
+
+// MARK: - Private
+private extension WordsFrequencyVC {
+	
+	
+	
+}
+
+// MARK: - Protocol Conformance
+// MARK: - Table View Data Source
 extension WordsFrequencyVC: UITableViewDataSource {
 	
 	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -60,5 +104,6 @@ extension WordsFrequencyVC: UITableViewDataSource {
 	
 }
 
+// MARK: - Table View Delegate
 // Just to bind it in the storyboard beforehand
 extension WordsFrequencyVC: UITableViewDelegate { }

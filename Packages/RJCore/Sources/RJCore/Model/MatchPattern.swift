@@ -7,6 +7,8 @@
 
 import Foundation
 
+
+
 /**
  A rule to define what should be considered as a single word.
  
@@ -38,7 +40,7 @@ public extension MatchPattern {
 		case .alphanumeric:
 			wordPattern = "[\\p{L}\\p{N}]+"
 		case .alphanumericWithDashesAndApostrophes:
-			wordPattern = "\\b[\\p{L}'-]+\\b"
+			wordPattern = "\\b[\\p{L}’'`-]+\\b"
 		}
 		return try! NSRegularExpression(pattern: wordPattern, options: [])
 	}

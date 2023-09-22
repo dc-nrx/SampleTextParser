@@ -162,14 +162,23 @@ final class RJServiceImplementationsTests: XCTestCase {
 	}
 
 	func testWordsWithApostrophesAlphanumericWithDashesAndApostrophes() async throws {
-		let res = try await sut.countWords(SampleString.wordsWithApostrophes.rawValue, matchPattern: .alphanumericWithDashesAndApostrophes)
-		XCTAssertEqual(res["it's"], 1)
-		XCTAssertEqual(res["they're"], 1)
+		let res = try await sut.countWords(SampleString.wordsWithDifferentApostrophes.rawValue, matchPattern: .alphanumericWithDashesAndApostrophes)
 		
-		XCTAssertNil(res["mother"])
-		XCTAssertNil(res["father"])
-		XCTAssertNil(res["in"])
-		XCTAssertNil(res["law"])
+		XCTAssertEqual(res["we’ll"], 1)
+		XCTAssertEqual(res["she's"], 1)
+		XCTAssertEqual(res["you`re"], 1)
+		
+		XCTAssertNil(res["we"])
+		XCTAssertNil(res["ll"])
+		XCTAssertNil(res["will"])
+
+		XCTAssertNil(res["she"])
+		XCTAssertNil(res["is"])
+		XCTAssertNil(res["s"])
+
+		XCTAssertNil(res["you"])
+		XCTAssertNil(res["are"])
+		XCTAssertNil(res["re"])
 	}
 	
 	func testHyphenatedWordsAlphanumeric() async throws {

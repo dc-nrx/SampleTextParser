@@ -65,8 +65,11 @@ enum SampleString: String {
 	/// 2 different words - hyphenated words
 	case hyphenatedWords = "mother-in-law father-in-law"
 	
-	/// 2 different words - words with apostrophes
+	/// 2 different words - words with ' apostrophes
 	case wordsWithApostrophes = "it's they're"
+
+	/// 3 different words with 3 apostrophe types ’  ' `
+	case wordsWithDifferentApostrophes = "we’ll she's you`re"
 	
 	/// 2 different words - words separated by newline character
 	case wordsSeparatedByNewLine = """

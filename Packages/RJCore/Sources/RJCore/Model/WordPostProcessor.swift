@@ -18,9 +18,8 @@ public typealias WordPostProcessor = (String) throws -> [String]?
 public final class CommonWordPostProcessors {
 	
 	public static var endingsExtractor: WordPostProcessor = { word in
-		/// More complex rules such as "t": "not" (which also involve preceding word processing) are omited here.
+		/// More complex rules such as "t": "not" (e. g. those involving preceding word processing) are omited here.
 		let endingsMap = [
-			"s": "is",
 			"re": "are",
 			"ve": "have",
 			"ll": "will",
@@ -34,6 +33,14 @@ public final class CommonWordPostProcessors {
 		}
 		subWords[1] = replacement
 		return subWords
-		
+	}
+
+	//TODO: Test
+	public static var postApostropheOmitter: WordPostProcessor = { word in
+		var subWords = word.split(separator: "'").map { String($0) }
+		guard subWords.count == 2 else {
+			return nil
+		}
+		return [subWords[0]]
 	}
 }

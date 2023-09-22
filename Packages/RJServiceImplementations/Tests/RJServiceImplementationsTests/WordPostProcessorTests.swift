@@ -34,11 +34,23 @@ final class WordPostProcessorTests: XCTestCase {
 										   matchPattern: .alphanumericWithDashesAndApostrophes,
 										   wordPostProcessor: CommonWordPostProcessors.endingsExtractor)
 		
-		XCTAssertEqual(res["it"], 1)
-		XCTAssertEqual(res["is"], 1)
+		XCTAssertEqual(res["it's"], 1)
 		XCTAssertEqual(res["they"], 1)
 		XCTAssertEqual(res["are"], 1)
 		
+		XCTAssertNil(res["they're"])
+	}
+
+	func testPostProcess_apostropheOmitter() async throws {
+		let res = try await sut.countWords(SampleString.wordsWithApostrophes.rawValue,
+										   matchPattern: .alphanumericWithDashesAndApostrophes,
+										   wordPostProcessor: CommonWordPostProcessors.postApostropheOmitter)
+		
+		XCTAssertEqual(res["it"], 1)
+		XCTAssertEqual(res["they"], 1)
+		
+		XCTAssertNil(res["is"])
+		XCTAssertNil(res["are"])
 		XCTAssertNil(res["it's"])
 		XCTAssertNil(res["they're"])
 	}
