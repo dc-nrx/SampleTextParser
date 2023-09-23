@@ -17,7 +17,21 @@ public enum TextParserError: Error {
 	//...
 }
 
-public typealias WordsCounterConfiguration = (pattern: MatchPattern, postProcessor: WordPostProcessor?)
+public struct WordsCounterConfiguration {
+
+	public var pattern: MatchPattern
+	public var postProcessor: WordPostProcessor?
+	
+	public init(
+		_ pattern: MatchPattern = .alphanumericWithDashesAndApostrophes,
+		postProcessor: WordPostProcessor? = nil
+	) {
+		self.pattern = pattern
+		self.postProcessor = postProcessor
+	}
+
+}
+
 public typealias WordFrequencyMap = [String: UInt]
 
 public protocol WordsCounter {
@@ -27,8 +41,7 @@ public protocol WordsCounter {
 	 */
 	func countWords(
 		_ string: String,
-		matchPattern: MatchPattern,
-		wordPostProcessor: WordPostProcessor?
+		config: WordsCounterConfiguration
 	) async throws -> WordFrequencyMap
 }
 
@@ -36,24 +49,24 @@ public protocol WordsCounter {
 public extension WordsCounter {
 	
 	func countWords(
-		_ string: String,
-		matchPattern: MatchPattern
+		_ string: String
 	) async throws -> WordFrequencyMap {
-		try await countWords(string, matchPattern: matchPattern, wordPostProcessor: nil)
+//		let defaultConfig
+		try await countWords(string, config: .init())
 	}
 	
-	func countWords(
-		textData: Data,
-		encoding: String.Encoding = .utf8,
-		matchPattern: MatchPattern = .alphanumeric,
-		wordPostProcessor: WordPostProcessor? = nil
-	) async throws -> WordFrequencyMap {
-		//TODO: Use async version
-		guard let string = String(data: textData, encoding: encoding) else {
-			throw TextParserError.parseFailed
-		}
-		
-		return try await countWords(string, matchPattern: matchPattern, wordPostProcessor: wordPostProcessor)
-	}
+//	func countWords(
+//		textData: Data,
+//		encoding: String.Encoding = .utf8,
+//		matchPattern: MatchPattern = .alphanumeric,
+//		wordPostProcessor: WordPostProcessor? = nil
+//	) async throws -> WordFrequencyMap {
+//		//TODO: Use async version
+//		guard let string = String(data: textData, encoding: encoding) else {
+//			throw TextParserError.parseFailed
+//		}
+//		
+//		return try await countWords(string, matchPattern: matchPattern, wordPostProcessor: wordPostProcessor)
+//	}
 	
 }

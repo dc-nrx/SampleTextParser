@@ -12,12 +12,11 @@ open class StandardWordsCounter: WordsCounter {
 	//TODO: Optimize from o(n^2) to o(n)
 	open func countWords(
 		_ string: String,
-		matchPattern: MatchPattern,
-		wordPostProcessor: WordPostProcessor?
+		config: WordsCounterConfiguration
 	) async throws -> WordFrequencyMap {
 		return try await withCheckedThrowingContinuation { continuation in
 			do {
-				let result = try syncCountWords(string, matchPattern: matchPattern, wordPostProcessor: wordPostProcessor)
+				let result = try syncCountWords(string, config: config)
 				continuation.resume(returning: result)
 			} catch {
 				continuation.resume(throwing: error)
@@ -27,16 +26,15 @@ open class StandardWordsCounter: WordsCounter {
 	
 	private func syncCountWords(
 		_ string: String,
-		matchPattern: MatchPattern,
-		wordPostProcessor: WordPostProcessor?
+		config: WordsCounterConfiguration
 	) throws -> WordFrequencyMap {
-		logger.debug("Count started for \(string.prefix(16))...; matchPattern = \(matchPattern.rawValue)")
+		logger.debug("Count started for \(string.prefix(16))...; matchPattern = \(config.pattern.rawValue)")
 		var result = WordFrequencyMap()
 		let allStringRange = NSRange(string.startIndex..., in: string)
-		for match in matchPattern.regex.matches(in: string, range: allStringRange) {
+		for match in config.pattern.regex.matches(in: string, range: allStringRange) {
 			let range = Range(match.range, in: string)! // the reason for o(n^2)
 			let word = string[range]
-			if let postProcessor = wordPostProcessor,
+			if let postProcessor = config.postProcessor,
 			   let wordsAfterSplit = try postProcessor(String(word)) {
 				logger.info("Post-processing: \(word) -> \(wordsAfterSplit)")
 				for subWord in wordsAfterSplit {

@@ -131,7 +131,7 @@ private extension WordsFrequencyVM {
 		
 		state.send(.countingWords)
 		//TODO: Make match pattern a parameter
-		let result = try await wordCounter.countWords(text, matchPattern: .alphanumericWithDashesAndApostrophes, wordPostProcessor: postProcessRule)
+		let result = try await wordCounter.countWords(text)
 		frequencyMapCache = result
 		return result
 	}

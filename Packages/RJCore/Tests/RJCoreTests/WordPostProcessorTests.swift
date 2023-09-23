@@ -22,17 +22,17 @@ final class WordPostProcessorTests: XCTestCase {
 	}
 
     func testPostProcess_alwaysReturnNil_makesNoChange() async throws {
-		let res = try await sut.countWords(SampleString.hyphenatedWords.rawValue, matchPattern: .alphanumericWithDashesAndApostrophes) { word in
+		let res = try await sut.countWords(SampleString.hyphenatedWords.rawValue, config: .init(.alphanumericWithDashesAndApostrophes) { word in
 			return nil
-		}
+		})
 		XCTAssertEqual(res["mother-in-law"], 1)
 		XCTAssertEqual(res["father-in-law"], 1)
 	}
 
 	func testPostProcess_splitWordsWithSingleApostrophe() async throws {
 		let res = try await sut.countWords(SampleString.wordsWithApostrophes.rawValue,
-										   matchPattern: .alphanumericWithDashesAndApostrophes,
-										   wordPostProcessor: CommonWordPostProcessors.endingsExtractor)
+										   config: .init(.alphanumericWithDashesAndApostrophes,
+														 postProcessor: CommonWordPostProcessors.endingsExtractor))
 		
 		XCTAssertEqual(res["it's"], 1)
 		XCTAssertEqual(res["they"], 1)
@@ -43,8 +43,8 @@ final class WordPostProcessorTests: XCTestCase {
 
 	func testPostProcess_apostropheOmitter() async throws {
 		let res = try await sut.countWords(SampleString.wordsWithApostrophes.rawValue,
-										   matchPattern: .alphanumericWithDashesAndApostrophes,
-										   wordPostProcessor: CommonWordPostProcessors.postApostropheOmitter)
+										   config: .init(.alphanumericWithDashesAndApostrophes,
+														 postProcessor: CommonWordPostProcessors.postApostropheOmitter))
 		
 		XCTAssertEqual(res["it"], 1)
 		XCTAssertEqual(res["they"], 1)

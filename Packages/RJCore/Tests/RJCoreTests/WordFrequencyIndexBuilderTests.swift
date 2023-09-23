@@ -25,13 +25,13 @@ final class WordFrequencyIndexBuilderTests: XCTestCase {
     }
 
     func testFrequencyIndex() async throws {
-		let frequencyMap = try await wordsCounter.countWords(SampleString.simpleEngLowercased.rawValue, matchPattern: .alphanumeric)
+		let frequencyMap = try await wordsCounter.countWords(SampleString.simpleEngLowercased.rawValue, config: .init(.alphanumeric))
 		let idx = await sut.build(frequencyMap, index: .mostFrequent)
 		XCTAssertEqual(idx.first, "two")
     }
 
 	func testAlphabeticalIndex() async throws {
-		let frequencyMap = try await wordsCounter.countWords(SampleString.simpleEngLowercased.rawValue, matchPattern: .alphanumeric)
+		let frequencyMap = try await wordsCounter.countWords(SampleString.simpleEngLowercased.rawValue, config: .init(.alphanumeric))
 		let idx = await sut.build(frequencyMap, index: .alphabetical)
 		XCTAssertEqual(idx[0], "one")
 		XCTAssertEqual(idx[1], "three")
