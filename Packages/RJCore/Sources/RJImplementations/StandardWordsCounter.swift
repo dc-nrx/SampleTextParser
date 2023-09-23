@@ -9,7 +9,6 @@ open class StandardWordsCounter: WordsCounter {
 	
 	public init() { }
 	
-	//TODO: Optimize from o(n^2) to o(n)
 	open func countWords(
 		_ string: String,
 		config: WordsCounterConfiguration
@@ -24,11 +23,13 @@ open class StandardWordsCounter: WordsCounter {
 		}
 	}
 	
+	//TODO: Optimize from o(n^2) to o(n)
 	private func syncCountWords(
 		_ string: String,
 		config: WordsCounterConfiguration
 	) throws -> WordFrequencyMap {
 		logger.debug("Count started for \(string.prefix(16))...; matchPattern = \(config.pattern.rawValue)")
+		
 		var result = WordFrequencyMap()
 		let allStringRange = NSRange(string.startIndex..., in: string)
 		for match in config.pattern.regex.matches(in: string, range: allStringRange) {

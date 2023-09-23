@@ -19,23 +19,25 @@ class WordsFrequencyVC: UIViewController {
 	@IBOutlet var stateLabel: UILabel!
 	@IBOutlet var tableView: UITableView!
 
-	let vm: WordsFrequencyVM
+	var vm: WordsFrequencyVM!
 	
 	private var cancellables = Set<AnyCancellable>()
 	
-	init(vm: WordsFrequencyVM) {
-		self.vm = vm
-
-		super.init()
-		self.setupBindings()
-	}
-	
-	required init?(coder: NSCoder) {
-		self.vm = WordsFrequencyVC.testVM
-		super.init(coder: coder)
-		self.setupBindings()
-		fatalError("init(coder:) has not been implemented")
-	}
+//	init(
+//		vm: WordsFrequencyVM,
+//		storyboard: UIStoryboard = UIStoryboard(name: "WordsFrequencyVC", bundle: nil)
+//	) {
+//		self = storyboard.instantiateInitialViewController()
+////		super.init()
+////		self.setupBindings()
+//	}
+//	
+//	required init?(coder: NSCoder) {
+//		self.vm = WordsFrequencyVC.testVM
+//		super.init(coder: coder)
+//		self.setupBindings()
+//		fatalError("init(coder:) has not been implemented")
+//	}
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
@@ -74,7 +76,7 @@ extension WordsFrequencyVC {
 	// MARK: - Actions
 	@IBAction func onIndexSelectionChanged(sender: UISegmentedControl) {
 		// TODO: make proper map & setup initial
-		let indexKey: WordFrequencyIndexKey = sender.selectedSegmentIndex == 0 ? .mostFrequent : .alphabetical
+		let indexKey: WordFrequencySortingKey = (sender.selectedSegmentIndex == 0) ? .mostFrequent : .alphabetical
 		vm.onIndexKeyChanged(indexKey)
 	}
 }

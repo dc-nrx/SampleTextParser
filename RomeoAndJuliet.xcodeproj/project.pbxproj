@@ -17,6 +17,7 @@
 		4F3DBE9C2AB95677007D60B7 /* RomeoAndJulietTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3DBE9B2AB95677007D60B7 /* RomeoAndJulietTests.swift */; };
 		4F3DBEA62AB95677007D60B7 /* RomeoAndJulietUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3DBEA52AB95677007D60B7 /* RomeoAndJulietUITests.swift */; };
 		4F3DBEA82AB95677007D60B7 /* RomeoAndJulietUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3DBEA72AB95677007D60B7 /* RomeoAndJulietUITestsLaunchTests.swift */; };
+		4FBB6ED42ABF59E2005A3ECA /* DependencyContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FBB6ED32ABF59E2005A3ECA /* DependencyContainer.swift */; };
 		4FC896F52ABD855A00AD807F /* RJImplementations in Frameworks */ = {isa = PBXBuildFile; productRef = 4FC896F42ABD855A00AD807F /* RJImplementations */; };
 		4FF142CA2ABDDE13006BC1EE /* RJResources in Frameworks */ = {isa = PBXBuildFile; productRef = 4FF142C92ABDDE13006BC1EE /* RJResources */; };
 /* End PBXBuildFile section */
@@ -54,6 +55,7 @@
 		4F3DBEA72AB95677007D60B7 /* RomeoAndJulietUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomeoAndJulietUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		4F3DBEB52AB9754E007D60B7 /* RJCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = RJCore; path = Packages/RJCore; sourceTree = "<group>"; };
 		4F3DBEB72AB97793007D60B7 /* RJViewModel */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = RJViewModel; path = Packages/RJViewModel; sourceTree = "<group>"; };
+		4FBB6ED32ABF59E2005A3ECA /* DependencyContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyContainer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +125,7 @@
 				4F3DBE8F2AB95677007D60B7 /* LaunchScreen.storyboard */,
 				4F3DBE8D2AB95677007D60B7 /* Assets.xcassets */,
 				4F3DBE922AB95677007D60B7 /* Info.plist */,
+				4FBB6ED32ABF59E2005A3ECA /* DependencyContainer.swift */,
 			);
 			path = RomeoAndJuliet;
 			sourceTree = "<group>";
@@ -291,6 +294,7 @@
 			files = (
 				4F3DBE892AB95676007D60B7 /* WordsFrequencyVC.swift in Sources */,
 				4F3DBE852AB95676007D60B7 /* AppDelegate.swift in Sources */,
+				4FBB6ED42ABF59E2005A3ECA /* DependencyContainer.swift in Sources */,
 				4F3DBE872AB95676007D60B7 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
