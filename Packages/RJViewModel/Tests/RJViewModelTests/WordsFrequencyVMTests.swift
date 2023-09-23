@@ -27,7 +27,7 @@ final class RJViewModelTests: XCTestCase {
 							   wordCounter: StandardWordsCounter(),
 							   indexBuilder: StandardIndexBuilder(),
 							   analytics: analyticsMock,
-							   initialIndexKey: .mostFrequent)
+							   initialSortingKey: .mostFrequent)
 	}
 
 	override func tearDown() {
@@ -47,10 +47,10 @@ final class RJViewModelTests: XCTestCase {
 	
 	func testOnIndexKeyChanged() {
 		sut.onIndexKeyChanged(.mostFrequent)
-		XCTAssertEqual(sut.indexKey, .mostFrequent)
+		XCTAssertEqual(sut.sortingKey, .mostFrequent)
 		
 		sut.onIndexKeyChanged(.alphabetical)
-		XCTAssertEqual(sut.indexKey, .alphabetical)
+		XCTAssertEqual(sut.sortingKey, .alphabetical)
 	}
 	
 	func testRegularFlow_stateChanges() async {
@@ -94,7 +94,7 @@ final class RJViewModelTests: XCTestCase {
 		
 		XCTAssertEqual(event.context?.count, 1)
 		let screenName = event.context![analyticsMock.screenNameKey] as! String
-		XCTAssertEqual(screenName, WordsFrequencyVM.screenName)
+		XCTAssertEqual(screenName, sut.screenName)
 	}
 	
 	// TODO: implement bunch of tests for error reporting and recovery from

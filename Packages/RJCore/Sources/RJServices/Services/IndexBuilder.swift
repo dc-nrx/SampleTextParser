@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum WordFrequencyIndexKey: String {
+public enum WordFrequencySortingKey: String {
 	case alphabetical
 	case mostFrequent
 }
@@ -17,7 +17,7 @@ public protocol WordFrequencyIndexBuilder where WordFrequencyMap.Key: Comparable
 	/// Return all words sorted according to provided rules.
 	func build(
 		_ frequencyMap: WordFrequencyMap,
-		index: WordFrequencyIndexKey
+		index: WordFrequencySortingKey
 	) async -> [WordFrequencyMap.Key]
 	
 }

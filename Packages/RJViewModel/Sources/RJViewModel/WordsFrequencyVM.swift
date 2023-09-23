@@ -7,6 +7,9 @@ import RJServices
 
 public extension WordsFrequencyVM {
 	
+	// MARK: - Nested Types
+	
+	/// Represents the state of the view model.
 	enum State: Equatable {
 		case initial
 		case updateStarted
@@ -19,26 +22,36 @@ public extension WordsFrequencyVM {
 		case error(description: String)
 	}
 	
+	/// Represents an item in the word frequency list.
 	typealias Item = (word: WordFrequencyMap.Key, frequency: WordFrequencyMap.Value)
 }
 
+/// Represents the view model for handling word frequencies.
 public final class WordsFrequencyVM {
 	
 	// MARK: - Public
 	
-	public static let screenName = "WordsFrequency"
+	/// The screen name associated with the view model (for analytics purposes).
+	public var screenName = "WordsFrequency"
 	
-	//TODO: Make var / clear cache on change
+	/// The text content that is being analyzed for word frequencies.
 	public private(set) var text: String
+
+	/// The configuration details used for counting words.
 	public private(set) var configuration: WordsCounterConfiguration
-	public private(set) var indexKey: WordFrequencyIndexKey
-	
+
+	/// The key that determines how word frequencies are sorted.
+	public private(set) var sortingKey: WordFrequencySortingKey
+
+	/// The current state of the view model.
 	public private(set) var state = CurrentValueSubject<State, Never>(.initial)
+
+	/// The list of word-frequency items to be displayed.
 	public private(set) var rowItems = CurrentValueSubject<[Item], Never>([])
-		
+	
 	// MARK: - Private
 	typealias IndexTable = [WordFrequencyMap.Key]
-	private var indexTablesCache = [WordFrequencyIndexKey: IndexTable]()
+	private var indexTablesCache = [WordFrequencySortingKey: IndexTable]()
 	private var frequencyMapCache: WordFrequencyMap?
 	
 	private var wordCounter: WordsCounter
@@ -52,19 +65,20 @@ public final class WordsFrequencyVM {
 	private let logger = Logger(subsystem: "RJViewModel", category: "WordsFrequencyVM")
 	
 	// MARK: - Init
+	
 	public init(
 		_ text: String,
 		wordCounter: WordsCounter,
 		indexBuilder: WordFrequencyIndexBuilder,
 		analytics: Analytics? = nil,
 		configuration: WordsCounterConfiguration = .init(.alphanumericWithDashesAndApostrophes),
-		initialIndexKey: WordFrequencyIndexKey = .mostFrequent
+		initialSortingKey: WordFrequencySortingKey = .mostFrequent
 	) {
 		self.text = text
 		self.wordCounter = wordCounter
 		self.indexBuilder = indexBuilder
 		self.analytics = analytics
-		self.indexKey = initialIndexKey
+		self.sortingKey = initialSortingKey
 		self.configuration = configuration
 		
 		self.setupLogging()
@@ -77,18 +91,18 @@ public final class WordsFrequencyVM {
 public extension WordsFrequencyVM {
 	
 	func onAppear() {
-		analytics?.screen(WordsFrequencyVM.screenName)
+		analytics?.screen(screenName)
 		if state.value == .initial {
-			loadData(for: indexKey)
+			loadData(sortedBy: sortingKey)
 		}
 	}
 	
-	func onIndexKeyChanged(_ newKey: WordFrequencyIndexKey) {
-		guard indexKey != newKey else { return }
+	func onIndexKeyChanged(_ newKey: WordFrequencySortingKey) {
+		guard sortingKey != newKey else { return }
 		
-		sendIndexChangedEvent(from: indexKey, to: newKey)
-		indexKey = newKey
-		loadData(for: indexKey)
+		sendIndexChangedEvent(from: sortingKey, to: newKey)
+		sortingKey = newKey
+		loadData(sortedBy: sortingKey)
 	}
 	
 	func onTextChange(to newText: String) {
@@ -99,7 +113,7 @@ public extension WordsFrequencyVM {
 	}
 	
 	func onConfigChange(to newConfig: WordsCounterConfiguration) {
-		// Not checkign here as well, since `WordsCounterConfiguration` has a closure parameter,
+		// Not checking here as well, since `WordsCounterConfiguration` has a closure parameter,
 		// which would be a bit tricky to conform to `Equetable`.
 		configuration = newConfig
 		reloadAfterCacheInvalidation()
@@ -111,7 +125,7 @@ private extension WordsFrequencyVM {
 	
 	// MARK: - Loading data
 	
-	func loadData(for newKey: WordFrequencyIndexKey) {
+	func loadData(sortedBy indexKey: WordFrequencySortingKey) {
 		guard updateTask == nil else { return }
 		
 		state.send(.updateStarted)
@@ -123,7 +137,7 @@ private extension WordsFrequencyVM {
 				let frequencyMap = try await self.lazilyLoadedFrequencyMap()
 				guard !Task.isCancelled else { throw CancellationError() }
 
-				let indexTable = await self.lazilyLoadedIndex(frequencyMap, newKey)
+				let indexTable = await self.lazilyLoadedIndex(frequencyMap, indexKey)
 				guard !Task.isCancelled else { throw CancellationError() }
 				
 				self.state.send(.updatingRows)
@@ -154,7 +168,7 @@ private extension WordsFrequencyVM {
 		return result
 	}
 	
-	func lazilyLoadedIndex(_ map: WordFrequencyMap, _ key: WordFrequencyIndexKey) async -> IndexTable {
+	func lazilyLoadedIndex(_ map: WordFrequencyMap, _ key: WordFrequencySortingKey) async -> IndexTable {
 		if let cachedTable = indexTablesCache[key] { return cachedTable }
 		
 		state.send(.buildingIndex)
@@ -174,7 +188,7 @@ private extension WordsFrequencyVM {
 			await self.invalidateCache()
 			
 			guard !Task.isCancelled else { return }
-			self.loadData(for: self.indexKey)
+			self.loadData(sortedBy: self.sortingKey)
 		}
 	}
 	
@@ -191,7 +205,7 @@ private extension WordsFrequencyVM {
 	}
 	
 	func clearCache() {
-		indexTablesCache = [WordFrequencyIndexKey: IndexTable]()
+		indexTablesCache = [WordFrequencySortingKey: IndexTable]()
 		frequencyMapCache = nil
 		rowItems.send([])
 	}
@@ -234,13 +248,13 @@ private extension WordsFrequencyVM {
 	}
 	
 	func sendIndexChangedEvent(
-		from: WordFrequencyIndexKey,
-		to: WordFrequencyIndexKey
+		from: WordFrequencySortingKey,
+		to: WordFrequencySortingKey
 	) {
 		analytics?.event("indexKeyChaged", context: [
-			"from": indexKey,
+			"from": from,
 			"to": to,
-			"screen": WordsFrequencyVM.screenName])
+			"screen": screenName])
 	}
 }
 

@@ -18,7 +18,7 @@ open class StandardIndexBuilder: WordFrequencyIndexBuilder {
 	
 	open func build(
 		_ frequencyMap: WordFrequencyMap,
-		index: WordFrequencyIndexKey
+		index: WordFrequencySortingKey
 	) async -> [WordFrequencyMap.Key] {
 		return await withCheckedContinuation { continuation in
 			logger.debug("Start building `\(index.rawValue)` index...")
