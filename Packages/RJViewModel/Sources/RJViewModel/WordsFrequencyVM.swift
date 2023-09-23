@@ -8,7 +8,15 @@ import RJServices
 public extension WordsFrequencyVM {
 	
 	enum State: Equatable {
-		case initial, updateStarted, countingWords, buildingIndex, updatingRows, finished, cancelled, error(description: String)
+		case initial
+		case updateStarted
+		case countingWords
+		case buildingIndex
+		case updatingRows
+		case finished
+		case cancelling
+		case cancelled
+		case error(description: String)
 	}
 	
 	typealias Item = (word: WordFrequencyMap.Key, frequency: WordFrequencyMap.Value)
@@ -88,7 +96,7 @@ private extension WordsFrequencyVM {
 		updateTask = Task { [weak self] in
 			guard let self else { return }
 			
-			defer { updateTask = nil }
+			defer { self.updateTask = nil }
 			do {
 				let frequencyMap = try await self.lazilyLoadedFrequencyMap()
 				guard !Task.isCancelled else { throw CancellationError() }
@@ -136,20 +144,22 @@ private extension WordsFrequencyVM {
 
 	// MARK: - Reset
 	
-	func requestReset() async {
-		if let updateTask {
+	func reset() async {
+		if let updateTask, state.value != .cancelling {
+			state.send(.cancelling)
 			updateTask.cancel()
-			self.updateTask = nil
 			await waitForCancelledState()
+			self.updateTask = nil
 		}
-		reset()
+		
+		clearData()
+		state.send(.initial)
 	}
 	
-	func reset() {
+	func clearData() {
 		indexTablesCache = [WordFrequencyIndexKey: IndexTable]()
 		frequencyMapCache = nil
 		rowItems.send([])
-		state.send(.initial)
 	}
 	
 	func waitForCancelledState() async {
