@@ -29,10 +29,9 @@ public final class WordsFrequencyVM {
 	public static let screenName = "WordsFrequency"
 	
 	//TODO: Make var / clear cache on change
-	public let text: String
-	
+	public private(set) var text: String
+	public private(set) var configuration: WordsCounterConfiguration
 	public private(set) var indexKey: WordFrequencyIndexKey
-	public private(set) var postProcessRule: WordPostProcessor?
 	
 	public private(set) var state = CurrentValueSubject<State, Never>(.initial)
 	public private(set) var rowItems = CurrentValueSubject<[Item], Never>([])
@@ -47,6 +46,8 @@ public final class WordsFrequencyVM {
 	private var analytics: Analytics?
 	
 	private var updateTask: Task<Void, Never>? = nil
+	private var resetTask: Task<Void, Never>? = nil
+	
 	private var cancellables = Set<AnyCancellable>()
 	private let logger = Logger(subsystem: "RJViewModel", category: "WordsFrequencyVM")
 	
@@ -56,6 +57,7 @@ public final class WordsFrequencyVM {
 		wordCounter: WordsCounter,
 		indexBuilder: WordFrequencyIndexBuilder,
 		analytics: Analytics? = nil,
+		configuration: WordsCounterConfiguration = .init(.alphanumericWithDashesAndApostrophes),
 		initialIndexKey: WordFrequencyIndexKey = .mostFrequent
 	) {
 		self.text = text
@@ -63,6 +65,7 @@ public final class WordsFrequencyVM {
 		self.indexBuilder = indexBuilder
 		self.analytics = analytics
 		self.indexKey = initialIndexKey
+		self.configuration = configuration
 		
 		self.setupLogging()
 	}
@@ -81,11 +84,25 @@ public extension WordsFrequencyVM {
 	}
 	
 	func onIndexKeyChanged(_ newKey: WordFrequencyIndexKey) {
-		if indexKey != newKey {
-			sendIndexChangedEvent(from: indexKey, to: newKey)
-			indexKey = newKey
-			loadData(for: indexKey)
-		}
+		guard indexKey != newKey else { return }
+		
+		sendIndexChangedEvent(from: indexKey, to: newKey)
+		indexKey = newKey
+		loadData(for: indexKey)
+	}
+	
+	func onTextChange(to newText: String) {
+		// not checking for `text != newText` to avoid main thread
+		// hanging in case of a huge text.
+		text = newText
+		reloadAfterCacheInvalidation()
+	}
+	
+	func onConfigChange(to newConfig: WordsCounterConfiguration) {
+		// Not checkign here as well, since `WordsCounterConfiguration` has a closure parameter,
+		// which would be a bit tricky to conform to `Equetable`.
+		configuration = newConfig
+		reloadAfterCacheInvalidation()
 	}
 }
 
@@ -132,8 +149,7 @@ private extension WordsFrequencyVM {
 		if let frequencyMapCache { return frequencyMapCache }
 		
 		state.send(.countingWords)
-		//TODO: Make match pattern a parameter
-		let result = try await wordCounter.countWords(text)
+		let result = try await wordCounter.countWords(text, config: configuration)
 		frequencyMapCache = result
 		return result
 	}
@@ -149,7 +165,20 @@ private extension WordsFrequencyVM {
 
 	// MARK: - Cancellation
 	
-	func reset() async {
+	func reloadAfterCacheInvalidation() {
+		if let resetTask { resetTask.cancel() }
+		resetTask = Task { [weak self] in
+			guard let self else { return }
+			
+			defer { self.resetTask = nil }
+			await self.invalidateCache()
+			
+			guard !Task.isCancelled else { return }
+			self.loadData(for: self.indexKey)
+		}
+	}
+	
+	func invalidateCache() async {
 		if let updateTask, state.value != .cancelling {
 			state.send(.cancelling)
 			updateTask.cancel()
@@ -157,11 +186,11 @@ private extension WordsFrequencyVM {
 			self.updateTask = nil
 		}
 		
-		clearData()
+		clearCache()
 		state.send(.initial)
 	}
 	
-	func clearData() {
+	func clearCache() {
 		indexTablesCache = [WordFrequencyIndexKey: IndexTable]()
 		frequencyMapCache = nil
 		rowItems.send([])

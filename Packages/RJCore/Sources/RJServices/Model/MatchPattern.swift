@@ -29,6 +29,8 @@ public enum MatchPattern: String {
 	
 	// Extend with emoji containing words or whatever else
 	// ...
+	
+	public static let apostrophes = "’'`"
 }
 
 public extension MatchPattern {
@@ -40,7 +42,7 @@ public extension MatchPattern {
 		case .alphanumeric:
 			wordPattern = "[\\p{L}\\p{N}]+"
 		case .alphanumericWithDashesAndApostrophes:
-			wordPattern = "(?<=\\W|^)[\\p{L}’'`-]+(?=\\W|$)"
+			wordPattern = "(?<=\\W|^)[\\p{L}\(MatchPattern.apostrophes)-]+(?=\\W|$)"
 		}
 		return try! NSRegularExpression(pattern: wordPattern, options: [])
 	}

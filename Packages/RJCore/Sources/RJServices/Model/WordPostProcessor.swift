@@ -25,8 +25,8 @@ public final class CommonWordPostProcessors {
 			"ll": "will",
 			"d": "would"
 		]
-				
-		var subWords = word.split(separator: "'").map { String($0) }
+		
+		var subWords = word.components(separatedBy: apostrophesCharacterSet).map { String($0) }
 		guard subWords.count == 2,
 		   let replacement = endingsMap[subWords[1]] else {
 			   return nil
@@ -35,12 +35,15 @@ public final class CommonWordPostProcessors {
 		return subWords
 	}
 
-	//TODO: Test
 	public static var postApostropheOmitter: WordPostProcessor = { word in
-		var subWords = word.split(separator: "'").map { String($0) }
-		guard subWords.count == 2 else {
+		var subWords = word.components(separatedBy: apostrophesCharacterSet).map { String($0) }
+		guard subWords.count == 2, !subWords[0].isEmpty else {
 			return nil
 		}
 		return [subWords[0]]
 	}
+	
+	// MARK: -
+	
+	private static let apostrophesCharacterSet = CharacterSet(charactersIn: MatchPattern.apostrophes)
 }

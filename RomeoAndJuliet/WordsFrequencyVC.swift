@@ -34,7 +34,7 @@ class WordsFrequencyVC: UIViewController {
 		self.vm = WordsFrequencyVC.testVM
 		super.init(coder: coder)
 		self.setupBindings()
-//		fatalError("init(coder:) has not been implemented")
+		fatalError("init(coder:) has not been implemented")
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
