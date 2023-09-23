@@ -28,7 +28,7 @@ let package = Package(
 		.target(
 			  name: "RJResources",
 			  dependencies: [],
-			  resources: [.process("Resources")]),
+			  resources: [.process("Files")]),
         .testTarget(
             name: "RJCoreTests",
             dependencies: ["RJServices", "RJImplementations", "RJResources"]),

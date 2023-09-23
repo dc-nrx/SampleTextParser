@@ -43,9 +43,10 @@ public final class WordsFrequencyVM {
 	private var indexBuilder: WordFrequencyIndexBuilder
 	private var analytics: Analytics?
 	
+	private var updateTask: Task<Void, Never>? = nil
 	private var cancellables = Set<AnyCancellable>()
 	private let logger = Logger(subsystem: "RJViewModel", category: "WordsFrequencyVM")
-	private var updateTask: Task<Void, Never>? = nil
+	private let screenName = "WordsFrequency"
 	
 	// MARK: - Init
 	public init(
@@ -71,6 +72,7 @@ public final class WordsFrequencyVM {
 public extension WordsFrequencyVM {
 	
 	func onAppear() {
+		analytics?.screen(screenName)
 		if state.value == .initial {
 			loadData(for: indexKey)
 		}
@@ -78,6 +80,7 @@ public extension WordsFrequencyVM {
 	
 	func onIndexKeyChanged(_ newKey: WordFrequencyIndexKey) {
 		if indexKey != newKey {
+			sendIndexChangedEvent(from: indexKey, to: newKey)
 			indexKey = newKey
 			loadData(for: indexKey)
 		}
@@ -87,7 +90,7 @@ public extension WordsFrequencyVM {
 // MARK: - Private
 private extension WordsFrequencyVM {
 	
-	// MARK: - Logic
+	// MARK: - Loading data
 	
 	func loadData(for newKey: WordFrequencyIndexKey) {
 		guard updateTask == nil else { return }
@@ -142,7 +145,7 @@ private extension WordsFrequencyVM {
 		return result
 	}
 
-	// MARK: - Reset
+	// MARK: - Cancellation
 	
 	func reset() async {
 		if let updateTask, state.value != .cancelling {
@@ -197,6 +200,16 @@ private extension WordsFrequencyVM {
 			self?.logger.info("Items = \(items.prefix(8))(...)")
 		}
 		.store(in: &cancellables)
+	}
+	
+	func sendIndexChangedEvent(
+		from: WordFrequencyIndexKey,
+		to: WordFrequencyIndexKey
+	) {
+		analytics?.event("indexKeyChaged", context: [
+			"from": indexKey,
+			"to": to,
+			"screen": screenName])
 	}
 }
 

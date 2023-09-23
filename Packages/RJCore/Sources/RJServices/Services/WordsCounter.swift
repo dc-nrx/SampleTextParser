@@ -17,8 +17,9 @@ public enum TextParserError: Error {
 	//...
 }
 
+public typealias WordsCounterConfiguration = (pattern: MatchPattern, postProcessor: WordPostProcessor?)
 public typealias WordFrequencyMap = [String: UInt]
-//TODO: Add max capacity associated type? (seems to be a bit too much)
+
 public protocol WordsCounter {
 	
 	/**

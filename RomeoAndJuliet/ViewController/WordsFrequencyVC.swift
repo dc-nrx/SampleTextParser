@@ -44,7 +44,7 @@ class WordsFrequencyVC: UIViewController {
 	}
 	
 	private static var testVM: WordsFrequencyVM {
-		let str = try! String(contentsOfFile: TextFile.romeoAndJuliet.path)
+		let str = try! String(contentsOfFile: LocalTextFile.romeoAndJuliet.path)
 		return WordsFrequencyVM(str, wordCounter: StandardWordsCounter(), indexBuilder: StandardIndexBuilder())
 	}
 	
