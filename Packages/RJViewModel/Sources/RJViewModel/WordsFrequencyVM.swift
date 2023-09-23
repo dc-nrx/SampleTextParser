@@ -35,7 +35,7 @@ public final class WordsFrequencyVM {
 	public var screenName = "WordsFrequency"
 	
 	/// The text content that is being analyzed for word frequencies.
-	public private(set) var text: String
+	public private(set) var textProvider: TextProvider
 
 	/// The configuration details used for counting words.
 	public private(set) var configuration: WordsCounterConfiguration
@@ -67,14 +67,14 @@ public final class WordsFrequencyVM {
 	// MARK: - Init
 	
 	public init(
-		_ text: String,
+		_ textProvider: TextProvider,
 		wordCounter: WordsCounter,
 		indexBuilder: WordFrequencyIndexBuilder,
 		analytics: Analytics? = nil,
 		configuration: WordsCounterConfiguration = .init(.alphanumericWithDashesAndApostrophes),
 		initialSortingKey: WordFrequencySortingKey = .mostFrequent
 	) {
-		self.text = text
+		self.textProvider = textProvider
 		self.wordCounter = wordCounter
 		self.indexBuilder = indexBuilder
 		self.analytics = analytics
@@ -105,10 +105,10 @@ public extension WordsFrequencyVM {
 		loadData(sortedBy: sortingKey)
 	}
 	
-	func onTextChange(to newText: String) {
+	func onTextProviderChange(to newTextProvider: TextProvider) {
 		// not checking for `text != newText` to avoid main thread
 		// hanging in case of a huge text.
-		text = newText
+		textProvider = newTextProvider
 		reloadAfterCacheInvalidation()
 	}
 	
@@ -163,6 +163,7 @@ private extension WordsFrequencyVM {
 		if let frequencyMapCache { return frequencyMapCache }
 		
 		state.send(.countingWords)
+		let text = try await textProvider.text
 		let result = try await wordCounter.countWords(text, config: configuration)
 		frequencyMapCache = result
 		return result

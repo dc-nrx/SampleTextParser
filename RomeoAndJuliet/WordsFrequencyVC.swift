@@ -23,21 +23,16 @@ class WordsFrequencyVC: UIViewController {
 	
 	private var cancellables = Set<AnyCancellable>()
 	
-//	init(
-//		vm: WordsFrequencyVM,
-//		storyboard: UIStoryboard = UIStoryboard(name: "WordsFrequencyVC", bundle: nil)
-//	) {
-//		self = storyboard.instantiateInitialViewController()
-////		super.init()
-////		self.setupBindings()
-//	}
-//	
-//	required init?(coder: NSCoder) {
-//		self.vm = WordsFrequencyVC.testVM
-//		super.init(coder: coder)
-//		self.setupBindings()
-//		fatalError("init(coder:) has not been implemented")
-//	}
+	required init?(coder: NSCoder) {
+		self.vm = WordsFrequencyVC.testVM
+		super.init(coder: coder)
+	}
+	
+	override func viewDidLoad() {
+		super.viewDidLoad()
+		
+		setupBindings()
+	}
 	
 	override func viewWillAppear(_ animated: Bool) {
 		super.viewWillAppear(animated)
@@ -46,8 +41,8 @@ class WordsFrequencyVC: UIViewController {
 	}
 	
 	private static var testVM: WordsFrequencyVM {
-		let str = try! String(contentsOfFile: LocalTextFile.romeoAndJuliet.path)
-		return WordsFrequencyVM(str, wordCounter: StandardWordsCounter(), indexBuilder: StandardIndexBuilder())
+		let textProvider = FileTextProvider(LocalTextFile.romeoAndJuliet.path)
+		return WordsFrequencyVM(textProvider, wordCounter: StandardWordsCounter(), indexBuilder: StandardIndexBuilder())
 	}
 	
 	private func setupBindings() {

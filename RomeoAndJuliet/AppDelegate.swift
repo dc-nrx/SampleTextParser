@@ -16,6 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	let dependencyContainer = DependencyContainer(
 		wordsCounter: StandardWordsCounter(),
 		indexBuilder: StandardIndexBuilder(),
+		fileTextProviderFactory: FileTextProvider.init,
 		analytics: nil)
 	
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {

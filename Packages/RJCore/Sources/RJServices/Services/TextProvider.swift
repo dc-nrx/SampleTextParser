@@ -16,3 +16,7 @@ public protocol TextProvider {
 	var text: String { get async throws }
 }
 
+extension String: TextProvider {
+	
+	public var text: String { self }
+}

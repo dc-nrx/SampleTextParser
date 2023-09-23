@@ -12,7 +12,7 @@ open class FileTextProvider: TextProvider {
 	
 	open var text: String {
 		get async throws {
-			return try await withCheckedThrowingContinuation { cont in
+			try await withCheckedThrowingContinuation { cont in
 				Task {
 					let result = try String(contentsOfFile: filePath, encoding: encoding)
 					cont.resume(returning: result)
@@ -25,7 +25,7 @@ open class FileTextProvider: TextProvider {
 	open var encoding: String.Encoding
 	
 	public init(
-		filePath: String,
+		_ filePath: String,
 		encoding: String.Encoding = .utf8
 	) {
 		self.filePath = filePath

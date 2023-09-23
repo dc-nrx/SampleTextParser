@@ -14,12 +14,10 @@ open class StandardWordsCounter: WordsCounter {
 		config: WordsCounterConfiguration
 	) async throws -> WordFrequencyMap {
 		return try await withCheckedThrowingContinuation { continuation in
-			do {
+			Task {
 				let result = try syncCountWords(string, config: config)
 				continuation.resume(returning: result)
-			} catch {
-				continuation.resume(throwing: error)
-			}			
+			}
 		}
 	}
 	
