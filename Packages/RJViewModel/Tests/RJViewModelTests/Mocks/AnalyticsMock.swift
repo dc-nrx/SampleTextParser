@@ -10,15 +10,15 @@ import Foundation
 
 class AnalyticsMock: Analytics {
 	
-	var lastReportedError: (any Error)?
-	var lastReportedEvent: (key: String, context: AnalyticsContext?)?
+	var reportedErrors = [(any Error)]()
+	var reportedEvents = [(key: String, context: AnalyticsContext?)]()
 	
 	func error(_ error: Error) {
-		lastReportedError = error
+		reportedErrors.append(error)
 	}
 	
 	func event(_ key: String, context: AnalyticsContext?) {
-		lastReportedEvent = (key: key, context: context)
+		reportedEvents.append((key: key, context: context))
 	}
 	
 }

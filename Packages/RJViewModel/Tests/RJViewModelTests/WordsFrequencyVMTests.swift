@@ -8,38 +8,44 @@ final class RJViewModelTests: XCTestCase {
 	
 	var cancellables: Set<AnyCancellable>!
 	var sut: WordsFrequencyVM!
+	var analyticsMock: AnalyticsMock!
 	
-	let samples = [
-		"abc abc abc aaa ddd"
-	]
+	let sampleString = "abc abc abc aaa ddd"
 
-	let initialStateSequence: [WordsFrequencyVM.State] = [.updateStarted, .countingWords, .buildingIndex, .updatingRows, .finished]
+	let initialUpdateStateSequence: [WordsFrequencyVM.State] = [.updateStarted, .countingWords, .buildingIndex, .updatingRows, .finished]
 	let wordsCountedNoIndexStateSequence: [WordsFrequencyVM.State] = [.updateStarted, .buildingIndex, .updatingRows, .finished]
-	let allCachedSequence: [WordsFrequencyVM.State] = [.updateStarted, .updatingRows, .finished]
+	let everythingCachedSequence: [WordsFrequencyVM.State] = [.updateStarted, .updatingRows, .finished]
 	
 	var wordsCounter: WordsCounter { StandardWordsCounter() }
 	var indexBuilder: WordFrequencyIndexBuilder { StandardIndexBuilder() }
-	var analytics: Analytics { AnalyticsMock() }
 	
 	override func setUp() {
 		super.setUp()
 		cancellables = []
+		analyticsMock = AnalyticsMock()
+		sut = WordsFrequencyVM(sampleString,
+							   wordCounter: StandardWordsCounter(),
+							   indexBuilder: StandardIndexBuilder(),
+							   analytics: analyticsMock,
+							   initialIndexKey: .mostFrequent)
 	}
 
 	override func tearDown() {
 		super.tearDown()
 		cancellables = nil
+		analyticsMock = nil
+		sut = nil
 	}
 	
 	func testInititalValues() {
-		let sut = makeSut(samples[0])
 		XCTAssertTrue(sut.rowItems.value.isEmpty)
 		XCTAssertEqual(sut.state.value, .initial)
+
+		XCTAssertTrue(analyticsMock.reportedErrors.isEmpty)
+		XCTAssertTrue(analyticsMock.reportedEvents.isEmpty)
 	}
 	
 	func testOnIndexKeyChanged() {
-		let sut = makeSut(samples[0])
-		
 		sut.onIndexKeyChanged(.mostFrequent)
 		XCTAssertEqual(sut.indexKey, .mostFrequent)
 		
@@ -48,9 +54,7 @@ final class RJViewModelTests: XCTestCase {
 	}
 	
 	func testRegularFlow_stateChanges() async {
-		let sut = makeSut(samples[0])
-		
-		let exp1 = expectCorrectStatesSequence(sut, initialStateSequence)
+		let exp1 = expectCorrectStatesSequence(sut, initialUpdateStateSequence)
 		sut.onAppear()
 		await fulfillment(of: [exp1], timeout: 0.1)
 
@@ -60,8 +64,6 @@ final class RJViewModelTests: XCTestCase {
 	}
 	
 	func testIndexChange_afterInitialLoad() async {
-		let sut = makeSut(samples[0])
-		
 		let exp1 = expectFinishedState(sut)
 		sut.onAppear()
 		await fulfillment(of: [exp1])
@@ -76,14 +78,23 @@ final class RJViewModelTests: XCTestCase {
 	}
 	
 	func testMultipleEventCalls_correctStateChanges() async {
-		let sut = makeSut(samples[0])
-		
-		let exp = expectCorrectStatesSequence(sut, initialStateSequence)
+		let exp = expectCorrectStatesSequence(sut, initialUpdateStateSequence)
 		sut.onAppear()
 		sut.onAppear()
 		sut.onAppear()
 		await fulfillment(of: [exp], timeout: 0.2)
 		XCTAssertEqual(sut.rowItems.value.map { $0.frequency }, [3, 1, 1])
+	}
+	
+	func testAnalytics_singleOnAppear() async {
+		sut.onAppear()
+		XCTAssertEqual(analyticsMock.reportedEvents.count, 1)
+		let event = analyticsMock.reportedEvents[0]
+		XCTAssertEqual(event.key, analyticsMock.screenShownEventName)
+		
+		XCTAssertEqual(event.context?.count, 1)
+		let screenName = event.context![analyticsMock.screenNameKey] as! String
+		XCTAssertEqual(screenName, WordsFrequencyVM.screenName)
 	}
 	
 	// TODO: implement bunch of tests for error reporting and recovery from
@@ -92,14 +103,9 @@ final class RJViewModelTests: XCTestCase {
 	}
 	
 	// TODO: implement tests for data change & mix with error cases
-	// TODO: implement & test analytics calls
 }
 
 private extension RJViewModelTests {
-	
-	func makeSut(_ string: String) -> WordsFrequencyVM {
-		WordsFrequencyVM(string, wordCounter: wordsCounter, indexBuilder: indexBuilder, analytics: analytics, initialIndexKey: .mostFrequent)
-	}
 
 	func expectFinishedState(_ sut: WordsFrequencyVM) -> XCTestExpectation {
 		let exp = expectation(description: "`.finished` state should be called")

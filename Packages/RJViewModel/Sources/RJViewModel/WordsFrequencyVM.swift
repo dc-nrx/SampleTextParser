@@ -25,6 +25,9 @@ public extension WordsFrequencyVM {
 public final class WordsFrequencyVM {
 	
 	// MARK: - Public
+	
+	public static let screenName = "WordsFrequency"
+	
 	//TODO: Make var / clear cache on change
 	public let text: String
 	
@@ -46,7 +49,6 @@ public final class WordsFrequencyVM {
 	private var updateTask: Task<Void, Never>? = nil
 	private var cancellables = Set<AnyCancellable>()
 	private let logger = Logger(subsystem: "RJViewModel", category: "WordsFrequencyVM")
-	private let screenName = "WordsFrequency"
 	
 	// MARK: - Init
 	public init(
@@ -72,7 +74,7 @@ public final class WordsFrequencyVM {
 public extension WordsFrequencyVM {
 	
 	func onAppear() {
-		analytics?.screen(screenName)
+		analytics?.screen(WordsFrequencyVM.screenName)
 		if state.value == .initial {
 			loadData(for: indexKey)
 		}
@@ -209,7 +211,7 @@ private extension WordsFrequencyVM {
 		analytics?.event("indexKeyChaged", context: [
 			"from": indexKey,
 			"to": to,
-			"screen": screenName])
+			"screen": WordsFrequencyVM.screenName])
 	}
 }
 
