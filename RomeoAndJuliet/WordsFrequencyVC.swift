@@ -21,7 +21,7 @@ class WordsFrequencyVC: UIViewController {
 
 	var vm: WordsFrequencyVM!
 	
-	private typealias SortOption = (WordFrequencySortingKey, String)
+	private typealias SortOption = (key: WordFrequencySortingKey, title: String)
 	private let sortOptions: [SortOption] = [
 		SortOption(.alphabetical, "Alphabetical"),
 		SortOption(.mostFrequent, "Frequency"),
@@ -29,12 +29,7 @@ class WordsFrequencyVC: UIViewController {
 	]
 	
 	private var cancellables = Set<AnyCancellable>()
-	
-	required init?(coder: NSCoder) {
-		self.vm = WordsFrequencyVC.testVM
-		super.init(coder: coder)
-	}
-	
+
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
@@ -47,12 +42,6 @@ class WordsFrequencyVC: UIViewController {
 		
 		vm.onAppear()
 	}
-	
-	private static var testVM: WordsFrequencyVM {
-		let textProvider = FileTextProvider(LocalTextFile.romeoAndJuliet.path)
-		return WordsFrequencyVM(textProvider, wordCounter: StandardWordsCounter(), indexBuilder: StandardIndexBuilder())
-	}
-
 }
 
 extension WordsFrequencyVC {
@@ -60,7 +49,7 @@ extension WordsFrequencyVC {
 	// MARK: - Actions
 	@IBAction func onIndexSelectionChanged(sender: UISegmentedControl) {
 		// TODO: make proper map & setup initial
-		let indexKey = sortOptions[sender.selectedSegmentIndex].0
+		let indexKey = sortOptions[sender.selectedSegmentIndex].key
 		vm.onIndexKeyChanged(indexKey)
 	}
 }
@@ -71,9 +60,17 @@ private extension WordsFrequencyVC {
 	func setupSortKeySegmentControl() {
 		indexSegmentControl.removeAllSegments()
 		for option in sortOptions.reversed() {
-			indexSegmentControl.insertSegment(withTitle: option.1, at: 0, animated: false)
+			indexSegmentControl.insertSegment(withTitle: option.title, at: 0, animated: false)
 		}
-		indexSegmentControl.selectedSegmentIndex = sortOptions.firstIndex { vm.sortingKey == $0.0 }!
+		
+		guard let selectedIndex = sortOptions.firstIndex(where: { vm.sortingKey == $0.key }) else {
+			assertionFailure("\(vm.sortingKey) is not in \(sortOptions)")
+			vm.onIndexKeyChanged(sortOptions[0].key)
+			indexSegmentControl.selectedSegmentIndex = 0
+			return
+		}
+		
+		indexSegmentControl.selectedSegmentIndex = selectedIndex
 	}
 	
 	func setupBindings() {

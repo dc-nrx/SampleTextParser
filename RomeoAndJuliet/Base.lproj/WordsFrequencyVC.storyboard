@@ -52,6 +52,7 @@
                         <constraints>
                             <constraint firstItem="M5V-wr-mDi" firstAttribute="top" secondItem="lNb-l7-cPj" secondAttribute="bottom" constant="16" id="0P7-4v-rjx"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="M5V-wr-mDi" secondAttribute="bottom" id="2Ug-ai-4WQ"/>
+                            <constraint firstItem="rH0-ZM-3sY" firstAttribute="width" relation="lessThanOrEqual" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.95" id="4HP-jM-LTt"/>
                             <constraint firstItem="lNb-l7-cPj" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="c9r-oB-8QM"/>
                             <constraint firstItem="M5V-wr-mDi" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="qpm-4g-etj"/>
                             <constraint firstItem="lNb-l7-cPj" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="u6f-3N-FU0"/>

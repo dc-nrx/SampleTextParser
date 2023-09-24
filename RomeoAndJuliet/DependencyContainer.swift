@@ -36,7 +36,7 @@ public final class DependencyContainer {
 public extension DependencyContainer {
 	
 	func makeWordsFrequencyVM(
-		_ filepath: String,
+		filepath: String,
 		encoding: String.Encoding = .utf8,
 		configuration: WordsCounterConfiguration = .init(.alphanumericWithDashesAndApostrophes)
 	) -> WordsFrequencyVM {
