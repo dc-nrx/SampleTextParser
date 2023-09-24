@@ -10,8 +10,6 @@ import Combine
 
 import RJServices
 import RJViewModel
-import RJImplementations
-import RJResources
 
 class WordsFrequencyVC: UIViewController {
 	
