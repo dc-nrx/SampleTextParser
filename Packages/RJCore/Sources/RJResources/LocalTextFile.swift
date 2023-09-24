@@ -17,8 +17,6 @@ public enum LocalTextFile: String {
 	case romeoAndJuliet_x120 = "RJ_x120"
 	/// About 1.2m lines
 	case romeoAndJuliet_x360 = "RJ_x360"
-	/// About 2m lines
-	case romeoAndJuliet_x600 = "RJ_x600"
 
 	public var path: String! {
 		Bundle.module.path(forResource: "\(rawValue)", ofType: "txt")

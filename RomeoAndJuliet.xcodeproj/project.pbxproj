@@ -13,30 +13,10 @@
 		4F3DBE8C2AB95676007D60B7 /* WordsFrequencyVC.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F3DBE8A2AB95676007D60B7 /* WordsFrequencyVC.storyboard */; };
 		4F3DBE8E2AB95677007D60B7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F3DBE8D2AB95677007D60B7 /* Assets.xcassets */; };
 		4F3DBE912AB95677007D60B7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F3DBE8F2AB95677007D60B7 /* LaunchScreen.storyboard */; };
-		4F3DBE9C2AB95677007D60B7 /* RomeoAndJulietTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3DBE9B2AB95677007D60B7 /* RomeoAndJulietTests.swift */; };
-		4F3DBEA62AB95677007D60B7 /* RomeoAndJulietUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3DBEA52AB95677007D60B7 /* RomeoAndJulietUITests.swift */; };
-		4F3DBEA82AB95677007D60B7 /* RomeoAndJulietUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F3DBEA72AB95677007D60B7 /* RomeoAndJulietUITestsLaunchTests.swift */; };
 		4FBB6ED42ABF59E2005A3ECA /* DependencyContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FBB6ED32ABF59E2005A3ECA /* DependencyContainer.swift */; };
 		4FC896F52ABD855A00AD807F /* RJImplementations in Frameworks */ = {isa = PBXBuildFile; productRef = 4FC896F42ABD855A00AD807F /* RJImplementations */; };
 		4FF142CA2ABDDE13006BC1EE /* RJResources in Frameworks */ = {isa = PBXBuildFile; productRef = 4FF142C92ABDDE13006BC1EE /* RJResources */; };
 /* End PBXBuildFile section */
-
-/* Begin PBXContainerItemProxy section */
-		4F3DBE982AB95677007D60B7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4F3DBE792AB95675007D60B7 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4F3DBE802AB95676007D60B7;
-			remoteInfo = RomeoAndJuliet;
-		};
-		4F3DBEA22AB95677007D60B7 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 4F3DBE792AB95675007D60B7 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 4F3DBE802AB95676007D60B7;
-			remoteInfo = RomeoAndJuliet;
-		};
-/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		4F3DBE812AB95676007D60B7 /* RomeoAndJuliet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RomeoAndJuliet.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -46,11 +26,6 @@
 		4F3DBE8D2AB95677007D60B7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		4F3DBE902AB95677007D60B7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4F3DBE922AB95677007D60B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		4F3DBE972AB95677007D60B7 /* RomeoAndJulietTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RomeoAndJulietTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		4F3DBE9B2AB95677007D60B7 /* RomeoAndJulietTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomeoAndJulietTests.swift; sourceTree = "<group>"; };
-		4F3DBEA12AB95677007D60B7 /* RomeoAndJulietUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RomeoAndJulietUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		4F3DBEA52AB95677007D60B7 /* RomeoAndJulietUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomeoAndJulietUITests.swift; sourceTree = "<group>"; };
-		4F3DBEA72AB95677007D60B7 /* RomeoAndJulietUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RomeoAndJulietUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		4F3DBEB52AB9754E007D60B7 /* RJCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = RJCore; path = Packages/RJCore; sourceTree = "<group>"; };
 		4F3DBEB72AB97793007D60B7 /* RJViewModel */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = RJViewModel; path = Packages/RJViewModel; sourceTree = "<group>"; };
 		4FBB6ED32ABF59E2005A3ECA /* DependencyContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyContainer.swift; sourceTree = "<group>"; };
@@ -64,20 +39,6 @@
 				4FC896F52ABD855A00AD807F /* RJImplementations in Frameworks */,
 				4FF142CA2ABDDE13006BC1EE /* RJResources in Frameworks */,
 				4F326AE42ABC523600FB2048 /* RJViewModel in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4F3DBE942AB95677007D60B7 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4F3DBE9E2AB95677007D60B7 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,8 +56,6 @@
 			isa = PBXGroup;
 			children = (
 				4F3DBE832AB95676007D60B7 /* RomeoAndJuliet */,
-				4F3DBE9A2AB95677007D60B7 /* RomeoAndJulietTests */,
-				4F3DBEA42AB95677007D60B7 /* RomeoAndJulietUITests */,
 				4F3DBEB42AB9754E007D60B7 /* Packages */,
 				4F3DBE822AB95676007D60B7 /* Products */,
 				4F326AE22ABC523600FB2048 /* Frameworks */,
@@ -107,8 +66,6 @@
 			isa = PBXGroup;
 			children = (
 				4F3DBE812AB95676007D60B7 /* RomeoAndJuliet.app */,
-				4F3DBE972AB95677007D60B7 /* RomeoAndJulietTests.xctest */,
-				4F3DBEA12AB95677007D60B7 /* RomeoAndJulietUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -125,23 +82,6 @@
 				4FBB6ED32ABF59E2005A3ECA /* DependencyContainer.swift */,
 			);
 			path = RomeoAndJuliet;
-			sourceTree = "<group>";
-		};
-		4F3DBE9A2AB95677007D60B7 /* RomeoAndJulietTests */ = {
-			isa = PBXGroup;
-			children = (
-				4F3DBE9B2AB95677007D60B7 /* RomeoAndJulietTests.swift */,
-			);
-			path = RomeoAndJulietTests;
-			sourceTree = "<group>";
-		};
-		4F3DBEA42AB95677007D60B7 /* RomeoAndJulietUITests */ = {
-			isa = PBXGroup;
-			children = (
-				4F3DBEA52AB95677007D60B7 /* RomeoAndJulietUITests.swift */,
-				4F3DBEA72AB95677007D60B7 /* RomeoAndJulietUITestsLaunchTests.swift */,
-			);
-			path = RomeoAndJulietUITests;
 			sourceTree = "<group>";
 		};
 		4F3DBEB42AB9754E007D60B7 /* Packages */ = {
@@ -178,42 +118,6 @@
 			productReference = 4F3DBE812AB95676007D60B7 /* RomeoAndJuliet.app */;
 			productType = "com.apple.product-type.application";
 		};
-		4F3DBE962AB95677007D60B7 /* RomeoAndJulietTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4F3DBEAE2AB95677007D60B7 /* Build configuration list for PBXNativeTarget "RomeoAndJulietTests" */;
-			buildPhases = (
-				4F3DBE932AB95677007D60B7 /* Sources */,
-				4F3DBE942AB95677007D60B7 /* Frameworks */,
-				4F3DBE952AB95677007D60B7 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				4F3DBE992AB95677007D60B7 /* PBXTargetDependency */,
-			);
-			name = RomeoAndJulietTests;
-			productName = RomeoAndJulietTests;
-			productReference = 4F3DBE972AB95677007D60B7 /* RomeoAndJulietTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
-		4F3DBEA02AB95677007D60B7 /* RomeoAndJulietUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 4F3DBEB12AB95677007D60B7 /* Build configuration list for PBXNativeTarget "RomeoAndJulietUITests" */;
-			buildPhases = (
-				4F3DBE9D2AB95677007D60B7 /* Sources */,
-				4F3DBE9E2AB95677007D60B7 /* Frameworks */,
-				4F3DBE9F2AB95677007D60B7 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				4F3DBEA32AB95677007D60B7 /* PBXTargetDependency */,
-			);
-			name = RomeoAndJulietUITests;
-			productName = RomeoAndJulietUITests;
-			productReference = 4F3DBEA12AB95677007D60B7 /* RomeoAndJulietUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -226,14 +130,6 @@
 				TargetAttributes = {
 					4F3DBE802AB95676007D60B7 = {
 						CreatedOnToolsVersion = 14.3;
-					};
-					4F3DBE962AB95677007D60B7 = {
-						CreatedOnToolsVersion = 14.3;
-						TestTargetID = 4F3DBE802AB95676007D60B7;
-					};
-					4F3DBEA02AB95677007D60B7 = {
-						CreatedOnToolsVersion = 14.3;
-						TestTargetID = 4F3DBE802AB95676007D60B7;
 					};
 				};
 			};
@@ -251,8 +147,6 @@
 			projectRoot = "";
 			targets = (
 				4F3DBE802AB95676007D60B7 /* RomeoAndJuliet */,
-				4F3DBE962AB95677007D60B7 /* RomeoAndJulietTests */,
-				4F3DBEA02AB95677007D60B7 /* RomeoAndJulietUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -265,20 +159,6 @@
 				4F3DBE912AB95677007D60B7 /* LaunchScreen.storyboard in Resources */,
 				4F3DBE8E2AB95677007D60B7 /* Assets.xcassets in Resources */,
 				4F3DBE8C2AB95676007D60B7 /* WordsFrequencyVC.storyboard in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4F3DBE952AB95677007D60B7 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4F3DBE9F2AB95677007D60B7 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -295,37 +175,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		4F3DBE932AB95677007D60B7 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4F3DBE9C2AB95677007D60B7 /* RomeoAndJulietTests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		4F3DBE9D2AB95677007D60B7 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4F3DBEA82AB95677007D60B7 /* RomeoAndJulietUITestsLaunchTests.swift in Sources */,
-				4F3DBEA62AB95677007D60B7 /* RomeoAndJulietUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		4F3DBE992AB95677007D60B7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4F3DBE802AB95676007D60B7 /* RomeoAndJuliet */;
-			targetProxy = 4F3DBE982AB95677007D60B7 /* PBXContainerItemProxy */;
-		};
-		4F3DBEA32AB95677007D60B7 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 4F3DBE802AB95676007D60B7 /* RomeoAndJuliet */;
-			targetProxy = 4F3DBEA22AB95677007D60B7 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		4F3DBE8A2AB95676007D60B7 /* WordsFrequencyVC.storyboard */ = {
@@ -519,82 +369,6 @@
 			};
 			name = Release;
 		};
-		4F3DBEAF2AB95677007D60B7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 3Y7Z957SH7;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = dc.RomeoAndJulietTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RomeoAndJuliet.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/RomeoAndJuliet";
-			};
-			name = Debug;
-		};
-		4F3DBEB02AB95677007D60B7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 3Y7Z957SH7;
-				GENERATE_INFOPLIST_FILE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = dc.RomeoAndJulietTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/RomeoAndJuliet.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/RomeoAndJuliet";
-			};
-			name = Release;
-		};
-		4F3DBEB22AB95677007D60B7 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 3Y7Z957SH7;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = dc.RomeoAndJulietUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = RomeoAndJuliet;
-			};
-			name = Debug;
-		};
-		4F3DBEB32AB95677007D60B7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 3Y7Z957SH7;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = dc.RomeoAndJulietUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = RomeoAndJuliet;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -612,24 +386,6 @@
 			buildConfigurations = (
 				4F3DBEAC2AB95677007D60B7 /* Debug */,
 				4F3DBEAD2AB95677007D60B7 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		4F3DBEAE2AB95677007D60B7 /* Build configuration list for PBXNativeTarget "RomeoAndJulietTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4F3DBEAF2AB95677007D60B7 /* Debug */,
-				4F3DBEB02AB95677007D60B7 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		4F3DBEB12AB95677007D60B7 /* Build configuration list for PBXNativeTarget "RomeoAndJulietUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				4F3DBEB22AB95677007D60B7 /* Debug */,
-				4F3DBEB32AB95677007D60B7 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
