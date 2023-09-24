@@ -34,12 +34,14 @@ class WordsFrequencyVC: UIViewController {
 	
 	private var cancellables = Set<AnyCancellable>()
 
+	// MARK: - Life Cycle
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
 		setupBindings()
 		setupSortKeySegmentControl()
-		addControlsViewShadow()
+		updateControlsViewShadow(view.traitCollection.userInterfaceStyle)
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -47,11 +49,17 @@ class WordsFrequencyVC: UIViewController {
 		
 		vm.onAppear()
 	}
+	
+	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+		super.traitCollectionDidChange(previousTraitCollection)
+		
+		updateControlsViewShadow(view.traitCollection.userInterfaceStyle)
+	}
 }
 
+// MARK: - Actions
 extension WordsFrequencyVC {
-	
-	// MARK: - Actions
+		
 	@IBAction func onIndexSelectionChanged(sender: UISegmentedControl) {
 		// TODO: make proper map & setup initial
 		let indexKey = sortOptions[sender.selectedSegmentIndex].key
@@ -78,9 +86,14 @@ private extension WordsFrequencyVC {
 		indexSegmentControl.selectedSegmentIndex = selectedIndex
 	}
 	
-	func addControlsViewShadow() {
-		controlsView.layer.shadowColor = UIColor.black.cgColor
-		controlsView.layer.shadowOpacity = 0.6
+	func updateControlsViewShadow(_ interfaceStyle: UIUserInterfaceStyle) {
+		switch traitCollection.userInterfaceStyle {
+		case .dark:
+			controlsView.layer.shadowColor = UIColor.white.cgColor
+		default: // .light, .unspecified and potential future cases
+			controlsView.layer.shadowColor = UIColor.black.cgColor
+		}
+		controlsView.layer.shadowOpacity = 0.8
 		controlsView.layer.shadowOffset = CGSize(width: 0, height: 4)
 		controlsView.layer.shadowRadius = 4
 	}
