@@ -41,7 +41,7 @@ class WordsFrequencyVC: UIViewController {
 		
 		setupBindings()
 		setupSortKeySegmentControl()
-		updateControlsViewShadow(view.traitCollection.userInterfaceStyle)
+		updateControlsViewShadow()
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -53,7 +53,7 @@ class WordsFrequencyVC: UIViewController {
 	override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
 		super.traitCollectionDidChange(previousTraitCollection)
 		
-		updateControlsViewShadow(view.traitCollection.userInterfaceStyle)
+		updateControlsViewShadow()
 	}
 }
 
@@ -86,8 +86,8 @@ private extension WordsFrequencyVC {
 		indexSegmentControl.selectedSegmentIndex = selectedIndex
 	}
 	
-	func updateControlsViewShadow(_ interfaceStyle: UIUserInterfaceStyle) {
-		switch traitCollection.userInterfaceStyle {
+	func updateControlsViewShadow() {
+		switch view.traitCollection.userInterfaceStyle {
 		case .dark:
 			controlsView.layer.shadowColor = UIColor.white.cgColor
 		default: // .light, .unspecified and potential future cases
