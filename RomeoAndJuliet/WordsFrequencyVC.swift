@@ -116,7 +116,7 @@ private extension WordsFrequencyVC {
 		stateLabel.text = "State: \(vm.state.value)"
 		if vm.loadingInProgress && !activityIndicator.isAnimating {
 			activityIndicator.startAnimating()
-		} else {
+		} else if !vm.loadingInProgress {
 			activityIndicator.stopAnimating()
 		}
 	}
