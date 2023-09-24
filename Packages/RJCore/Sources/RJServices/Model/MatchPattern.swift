@@ -1,41 +1,50 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by Dmytro Chapovskyi on 19.09.2023.
 //
 
 import Foundation
 
-
-
 /**
- A rule to define what should be considered as a single word.
+ Defines patterns for matching words within a text.
  
- In case of need, words can be split further after applying the initial pattern matching (see `WordPostProcessor`).
+ This enum provides rules that specify what constitutes a single word.
+ Depending on the rule chosen, it determines how words are identified
+ and extracted from a given text. For further refinement or processing of words
+ after the initial pattern matching, consider using `WordPostProcessor`.
  */
 public enum MatchPattern: String {
 	
-	/// "1+" alphanumeric characters separeted by anything else
+	/// Matches sequences of one or more alphanumeric characters.
 	case alphanumeric
 	
 	/**
-	 "1+" alphabetical characters, plus `'` and `-`, separeted by anything else.
+	 Matches sequences of one or more alphabetical characters,
+	 possibly interspersed with apostrophes (see `apostrophes` below) and dashes (`-`).
 	 
-	 Good to handle words like "mother-in-law" ans "it's". For the latter, it may be useful to split it during the
-	 post-processing phase (see `WordPostProcessor`).
+	 This pattern is useful for identifying compound words like "mother-in-law"
+	 and contractions like "it's". For contractions, consider further processing
+	 using `WordPostProcessor` to split them into their component words.
 	 */
 	case alphanumericWithDashesAndApostrophes
 	
-	// Extend with emoji containing words or whatever else
+	// Placeholder for future patterns, such as those matching words containing emojis.
 	// ...
 	
+	/// A string containing various apostrophe characters.
 	public static let apostrophes = "’'`"
 }
 
 public extension MatchPattern {
 	
-	/// Using `NSRegularExpression` instead of the newer `Regex` to support versions prior to iOS 16.
+	/**
+	 Returns a `NSRegularExpression` object corresponding to the match pattern.
+	 
+	 Uses `NSRegularExpression` for compatibility with versions prior
+	 to iOS 16, even though the newer `Regex` type might be preferred in later versions.
+	 */
 	var regex: NSRegularExpression {
 		let wordPattern: String
 		switch self {

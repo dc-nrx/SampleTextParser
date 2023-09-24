@@ -7,37 +7,22 @@
 
 import Foundation
 
-public enum TextParserError: Error {
-	case fileIsEmpty
-	case noWordsFound
-	case parseFailed
-	// Overflows
-	case wordTooLong
-	case fileTooBig
-	//...
-}
-
-public struct WordsCounterConfiguration {
-
-	public var pattern: MatchPattern
-	public var postProcessor: WordPostProcessor?
-	
-	public init(
-		_ pattern: MatchPattern = .alphanumericWithDashesAndApostrophes,
-		postProcessor: WordPostProcessor? = nil
-	) {
-		self.pattern = pattern
-		self.postProcessor = postProcessor
-	}
-
-}
-
+/// Represents a map of words and their respective frequencies.
 public typealias WordFrequencyMap = [String: UInt]
 
+/**
+ A protocol that defines the capability to count word frequencies in a given string.
+ */
 public protocol WordsCounter {
 	
 	/**
-	 Count words in the string.
+	 Count the frequencies of words in the given string based on the provided configuration.
+	 
+	 - Parameters:
+		- string: The input text string.
+		- config: The configuration detailing how words should be parsed.
+	 
+	 - Returns: A `WordFrequencyMap` containing word frequencies.
 	 */
 	func countWords(
 		_ string: String,
@@ -45,28 +30,18 @@ public protocol WordsCounter {
 	) async throws -> WordFrequencyMap
 }
 
-
 public extension WordsCounter {
 	
+	/**
+	 Count the frequencies of words in the given string using the default configuration.
+	 
+	 - Parameter string: The input text string.
+	 
+	 - Returns: A `WordFrequencyMap` containing word frequencies.
+	 */
 	func countWords(
 		_ string: String
 	) async throws -> WordFrequencyMap {
-//		let defaultConfig
 		try await countWords(string, config: .init())
 	}
-	
-//	func countWords(
-//		textData: Data,
-//		encoding: String.Encoding = .utf8,
-//		matchPattern: MatchPattern = .alphanumeric,
-//		wordPostProcessor: WordPostProcessor? = nil
-//	) async throws -> WordFrequencyMap {
-//		//TODO: Use async version
-//		guard let string = String(data: textData, encoding: encoding) else {
-//			throw TextParserError.parseFailed
-//		}
-//		
-//		return try await countWords(string, matchPattern: matchPattern, wordPostProcessor: wordPostProcessor)
-//	}
-	
 }
