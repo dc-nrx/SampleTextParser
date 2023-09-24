@@ -12,7 +12,7 @@ import RJViewModel
 
 public final class DependencyContainer {
 	
-	public typealias FileTextProviderFactory = (String, String.Encoding) -> TextProvider
+	public typealias FileTextProviderFactory = (_ path: String, String.Encoding) -> TextProvider
 	
 	private let wordsCounter: WordsCounter
 	private let indexBuilder: WordFrequencyIndexBuilder
@@ -43,4 +43,12 @@ public extension DependencyContainer {
 		let textProvider = fileTextProviderFactory(filepath, encoding)
 		return WordsFrequencyVM(textProvider, wordCounter: wordsCounter, indexBuilder: indexBuilder, analytics: analytics, configuration: configuration)
 	}
+	
+	func makeWordsFrequencyVM(
+		text: String,
+		configuration: WordsCounterConfiguration = .init(.alphanumericWithDashesAndApostrophes)
+	) -> WordsFrequencyVM {
+		WordsFrequencyVM(text, wordCounter: wordsCounter, indexBuilder: indexBuilder, analytics: analytics, configuration: configuration)
+	}
+
 }

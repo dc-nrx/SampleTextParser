@@ -93,7 +93,7 @@ public extension WordsFrequencyVM {
 	func onAppear() {
 		analytics?.screen(screenName)
 		if state.value == .initial {
-			loadData(sortedBy: sortingKey)
+			loadDataUsingCache()
 		}
 	}
 	
@@ -102,21 +102,17 @@ public extension WordsFrequencyVM {
 		
 		sendIndexChangedEvent(from: sortingKey, to: newKey)
 		sortingKey = newKey
-		loadData(sortedBy: sortingKey)
+		loadDataUsingCache()
 	}
 	
 	func onTextProviderChange(to newTextProvider: TextProvider) {
-		// not checking for `text != newText` to avoid main thread
-		// hanging in case of a huge text.
 		textProvider = newTextProvider
-		reloadAfterCacheInvalidation()
+		reloadAll()
 	}
 	
 	func onConfigChange(to newConfig: WordsCounterConfiguration) {
-		// Not checking here as well, since `WordsCounterConfiguration` has a closure parameter,
-		// which would be a bit tricky to conform to `Equetable`.
 		configuration = newConfig
-		reloadAfterCacheInvalidation()
+		reloadAll()
 	}
 }
 
@@ -125,7 +121,7 @@ private extension WordsFrequencyVM {
 	
 	// MARK: - Loading data
 	
-	func loadData(sortedBy indexKey: WordFrequencySortingKey) {
+	func loadDataUsingCache() {
 		guard updateTask == nil else { return }
 		
 		state.send(.updateStarted)
@@ -137,7 +133,7 @@ private extension WordsFrequencyVM {
 				let frequencyMap = try await self.lazilyLoadedFrequencyMap()
 				guard !Task.isCancelled else { throw CancellationError() }
 
-				let indexTable = await self.lazilyLoadedIndex(frequencyMap, indexKey)
+				let indexTable = await self.lazilyLoadedIndex(frequencyMap, sortingKey)
 				guard !Task.isCancelled else { throw CancellationError() }
 				
 				self.state.send(.updatingRows)
@@ -180,16 +176,22 @@ private extension WordsFrequencyVM {
 
 	// MARK: - Cancellation
 	
-	func reloadAfterCacheInvalidation() {
+	func reloadAll() {
+		// Cancel to prevent the unnecessary `loadData` call
 		if let resetTask { resetTask.cancel() }
-		resetTask = Task { [weak self] in
+		resetTask = Task { [resetTask, weak self] in
 			guard let self else { return }
+			defer {
+				// Avoid nullifying a subsequent reset task ref
+				if resetTask == self.resetTask {
+					self.resetTask = nil
+				}
+			}
 			
-			defer { self.resetTask = nil }
 			await self.invalidateCache()
-			
 			guard !Task.isCancelled else { return }
-			self.loadData(sortedBy: self.sortingKey)
+			
+			self.loadDataUsingCache()
 		}
 	}
 	
