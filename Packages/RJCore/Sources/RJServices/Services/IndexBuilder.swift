@@ -7,9 +7,10 @@
 
 import Foundation
 
-public enum WordFrequencySortingKey: String {
+public enum WordFrequencySortingKey: String, CaseIterable {
 	case alphabetical
 	case mostFrequent
+	case wordLength
 }
 
 public protocol WordFrequencyIndexBuilder where WordFrequencyMap.Key: Comparable {

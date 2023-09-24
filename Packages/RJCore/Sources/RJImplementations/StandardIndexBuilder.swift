@@ -32,6 +32,8 @@ open class StandardIndexBuilder: WordFrequencyIndexBuilder {
 				result = frequencyMap
 					.sorted { $0.value > $1.value }
 					.map { $0.key }
+			case .wordLength:
+				result = frequencyMap.keys.sorted { $0.count < $1.count }
 			}
 			continuation.resume(returning: result)
 		}

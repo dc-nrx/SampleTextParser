@@ -21,6 +21,13 @@ class WordsFrequencyVC: UIViewController {
 
 	var vm: WordsFrequencyVM!
 	
+	private typealias SortOption = (WordFrequencySortingKey, String)
+	private let sortOptions: [SortOption] = [
+		SortOption(.alphabetical, "Alphabetical"),
+		SortOption(.mostFrequent, "Frequency"),
+		SortOption(.wordLength, "Length")
+	]
+	
 	private var cancellables = Set<AnyCancellable>()
 	
 	required init?(coder: NSCoder) {
@@ -32,6 +39,7 @@ class WordsFrequencyVC: UIViewController {
 		super.viewDidLoad()
 		
 		setupBindings()
+		setupSortKeySegmentControl()
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -44,26 +52,7 @@ class WordsFrequencyVC: UIViewController {
 		let textProvider = FileTextProvider(LocalTextFile.romeoAndJuliet.path)
 		return WordsFrequencyVM(textProvider, wordCounter: StandardWordsCounter(), indexBuilder: StandardIndexBuilder())
 	}
-	
-	private func setupBindings() {
-		vm.state
-			.receive(on: DispatchQueue.main)
-			.sink { [weak self] state in
-				self?.updateStateLabel(with: state)
-			}
-			.store(in: &cancellables)
-		
-		vm.rowItems
-			.receive(on: DispatchQueue.main)
-			.sink { [weak self] items in
-				self?.tableView.reloadData()
-			}
-			.store(in: &cancellables)
-	}
-	
-	private func updateStateLabel(with state: WordsFrequencyVM.State) {
-		stateLabel.text = "\(state)"
-	}
+
 }
 
 extension WordsFrequencyVC {
@@ -71,7 +60,7 @@ extension WordsFrequencyVC {
 	// MARK: - Actions
 	@IBAction func onIndexSelectionChanged(sender: UISegmentedControl) {
 		// TODO: make proper map & setup initial
-		let indexKey: WordFrequencySortingKey = (sender.selectedSegmentIndex == 0) ? .mostFrequent : .alphabetical
+		let indexKey = sortOptions[sender.selectedSegmentIndex].0
 		vm.onIndexKeyChanged(indexKey)
 	}
 }
@@ -79,6 +68,39 @@ extension WordsFrequencyVC {
 // MARK: - Private
 private extension WordsFrequencyVC {
 	
+	func setupSortKeySegmentControl() {
+		indexSegmentControl.removeAllSegments()
+		for option in sortOptions.reversed() {
+			indexSegmentControl.insertSegment(withTitle: option.1, at: 0, animated: false)
+		}
+		indexSegmentControl.selectedSegmentIndex = sortOptions.firstIndex { vm.sortingKey == $0.0 }!
+	}
+	
+	func setupBindings() {
+		vm.state
+			.receive(on: DispatchQueue.main)
+			.sink { [weak self] state in
+				self?.stateUpdated(to: state)
+			}
+			.store(in: &cancellables)
+		
+		vm.rowItems
+			.receive(on: DispatchQueue.main)
+			.sink { [weak self] items in
+				self?.itemsUpdated(to: items)
+			}
+			.store(in: &cancellables)
+	}
+	
+	func stateUpdated(to state: WordsFrequencyVM.State) {
+		stateLabel.text = "\(state)"
+	}
+	
+	func itemsUpdated(to items: [WordsFrequencyVM.Item]) {
+		self.tableView.beginUpdates()
+		self.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
+		self.tableView.endUpdates()
+	}
 }
 
 // MARK: - Protocol Conformance
