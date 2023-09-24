@@ -15,10 +15,14 @@ import RJResources
 
 class WordsFrequencyVC: UIViewController {
 	
-	@IBOutlet var indexSegmentControl: UISegmentedControl!
-	@IBOutlet var stateLabel: UILabel!
 	@IBOutlet var tableView: UITableView!
-
+	
+	@IBOutlet var controlsView: UIView!
+	@IBOutlet var stateLabel: UILabel!
+	@IBOutlet var totalWordsLabel: UILabel!
+	@IBOutlet var indexSegmentControl: UISegmentedControl!
+	@IBOutlet var activityIndicator: UIActivityIndicatorView!
+	
 	var vm: WordsFrequencyVM!
 	
 	private typealias SortOption = (key: WordFrequencySortingKey, title: String)
@@ -35,6 +39,7 @@ class WordsFrequencyVC: UIViewController {
 		
 		setupBindings()
 		setupSortKeySegmentControl()
+		addControlsViewShadow()
 	}
 	
 	override func viewWillAppear(_ animated: Bool) {
@@ -73,27 +78,41 @@ private extension WordsFrequencyVC {
 		indexSegmentControl.selectedSegmentIndex = selectedIndex
 	}
 	
+	func addControlsViewShadow() {
+		controlsView.layer.shadowColor = UIColor.black.cgColor
+		controlsView.layer.shadowOpacity = 0.6
+		controlsView.layer.shadowOffset = CGSize(width: 0, height: 4)
+		controlsView.layer.shadowRadius = 4
+	}
+	
 	func setupBindings() {
 		vm.state
 			.receive(on: DispatchQueue.main)
-			.sink { [weak self] state in
-				self?.stateUpdated(to: state)
+			.sink { [weak self] _ in
+				self?.updateStateLabel()
 			}
 			.store(in: &cancellables)
 		
 		vm.rowItems
 			.receive(on: DispatchQueue.main)
-			.sink { [weak self] items in
-				self?.itemsUpdated(to: items)
+			.sink { [weak self] _ in
+				self?.reloadWithNewItems()
 			}
 			.store(in: &cancellables)
 	}
 	
-	func stateUpdated(to state: WordsFrequencyVM.State) {
-		stateLabel.text = "\(state)"
+	func updateStateLabel() {
+		stateLabel.text = "State: \(vm.state.value)"
+		if vm.loadingInProgress && !activityIndicator.isAnimating {
+			activityIndicator.startAnimating()
+		} else {
+			activityIndicator.stopAnimating()
+		}
 	}
 	
-	func itemsUpdated(to items: [WordsFrequencyVM.Item]) {
+	func reloadWithNewItems() {
+		totalWordsLabel.text = "Total words: \(vm.rowItems.value.count)"
+		
 		self.tableView.beginUpdates()
 		self.tableView.reloadSections(IndexSet(integer: 0), with: .automatic)
 		self.tableView.endUpdates()

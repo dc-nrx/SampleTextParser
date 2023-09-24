@@ -17,52 +17,81 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="M5V-wr-mDi">
-                                <rect key="frame" x="100" y="758.66666666666663" width="193" height="59.333333333333371"/>
-                                <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xBF-rg-daf">
-                                        <rect key="frame" x="0.0" y="0.0" width="193" height="20.333333333333332"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="rH0-ZM-3sY">
-                                        <rect key="frame" x="0.0" y="28.333333333333371" width="193" height="32"/>
-                                        <segments>
-                                            <segment title="Frequency"/>
-                                            <segment title="Alphabetical"/>
-                                        </segments>
-                                        <connections>
-                                            <action selector="onIndexSelectionChangedWithSender:" destination="BYZ-38-t0r" eventType="valueChanged" id="XBz-0X-y2i"/>
-                                        </connections>
-                                    </segmentedControl>
-                                </subviews>
-                            </stackView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="lNb-l7-cPj">
-                                <rect key="frame" x="0.0" y="59" width="393" height="683.66666666666663"/>
+                                <rect key="frame" x="0.0" y="0.0" width="393" height="690.33333333333337"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <connections>
                                     <outlet property="dataSource" destination="BYZ-38-t0r" id="UfN-uM-HVw"/>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="YtR-am-trV"/>
                                 </connections>
                             </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vVT-fx-5tG">
+                                <rect key="frame" x="0.0" y="690.33333333333337" width="393" height="161.66666666666663"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="16" translatesAutoresizingMaskIntoConstraints="NO" id="M5V-wr-mDi">
+                                        <rect key="frame" x="19.666666666666657" y="16.000000000000007" width="353.66666666666674" height="103.66666666666669"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="100" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SoQ-md-V0R" userLabel="Total Words label">
+                                                <rect key="frame" x="0.0" y="0.0" width="353.66666666666669" height="20.333333333333332"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <stackView opaque="NO" contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="JPh-nh-NfM">
+                                                <rect key="frame" x="0.0" y="36.333333333333258" width="353.66666666666669" height="20.333333333333329"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="800" verticalCompressionResistancePriority="1000" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xBF-rg-daf">
+                                                        <rect key="frame" x="0.0" y="0.0" width="333.66666666666669" height="20.333333333333332"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="gWa-51-epD">
+                                                        <rect key="frame" x="333.66666666666663" y="0.0" width="20" height="20.333333333333332"/>
+                                                    </activityIndicatorView>
+                                                </subviews>
+                                            </stackView>
+                                            <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="rH0-ZM-3sY">
+                                                <rect key="frame" x="0.0" y="72.666666666666629" width="353.66666666666669" height="32"/>
+                                                <segments>
+                                                    <segment title="Frequency"/>
+                                                    <segment title="Alphabetical"/>
+                                                </segments>
+                                                <connections>
+                                                    <action selector="onIndexSelectionChangedWithSender:" destination="BYZ-38-t0r" eventType="valueChanged" id="XBz-0X-y2i"/>
+                                                </connections>
+                                            </segmentedControl>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstItem="M5V-wr-mDi" firstAttribute="width" secondItem="vVT-fx-5tG" secondAttribute="width" multiplier="0.9" id="8Ai-ca-iOS"/>
+                                    <constraint firstAttribute="bottomMargin" secondItem="M5V-wr-mDi" secondAttribute="bottom" id="JZk-wS-Sq7"/>
+                                    <constraint firstItem="M5V-wr-mDi" firstAttribute="centerX" secondItem="vVT-fx-5tG" secondAttribute="centerX" id="VfO-hY-9cO"/>
+                                    <constraint firstItem="M5V-wr-mDi" firstAttribute="top" secondItem="vVT-fx-5tG" secondAttribute="top" constant="16" id="cNc-oc-m2y"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="M5V-wr-mDi" firstAttribute="top" secondItem="lNb-l7-cPj" secondAttribute="bottom" constant="16" id="0P7-4v-rjx"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="M5V-wr-mDi" secondAttribute="bottom" id="2Ug-ai-4WQ"/>
-                            <constraint firstItem="rH0-ZM-3sY" firstAttribute="width" relation="lessThanOrEqual" secondItem="8bC-Xf-vdC" secondAttribute="width" multiplier="0.95" id="4HP-jM-LTt"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="vVT-fx-5tG" secondAttribute="trailing" id="5Py-7O-q1B"/>
                             <constraint firstItem="lNb-l7-cPj" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="c9r-oB-8QM"/>
-                            <constraint firstItem="M5V-wr-mDi" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="qpm-4g-etj"/>
-                            <constraint firstItem="lNb-l7-cPj" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="u6f-3N-FU0"/>
+                            <constraint firstAttribute="bottom" secondItem="vVT-fx-5tG" secondAttribute="bottom" id="dsW-eu-Jva"/>
+                            <constraint firstItem="vVT-fx-5tG" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="iIh-Ko-ErV"/>
+                            <constraint firstItem="vVT-fx-5tG" firstAttribute="top" secondItem="lNb-l7-cPj" secondAttribute="bottom" id="jSX-H6-d5L"/>
+                            <constraint firstItem="lNb-l7-cPj" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="u6f-3N-FU0"/>
                             <constraint firstItem="lNb-l7-cPj" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="zDM-av-qsL"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="gWa-51-epD" id="Y60-rs-ROH"/>
+                        <outlet property="controlsView" destination="vVT-fx-5tG" id="kfu-7y-NeG"/>
                         <outlet property="indexSegmentControl" destination="rH0-ZM-3sY" id="Nje-xe-ejc"/>
                         <outlet property="stateLabel" destination="xBF-rg-daf" id="xyZ-83-N0c"/>
                         <outlet property="tableView" destination="lNb-l7-cPj" id="qpM-f0-vYZ"/>
+                        <outlet property="totalWordsLabel" destination="SoQ-md-V0R" id="22l-ho-1l0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

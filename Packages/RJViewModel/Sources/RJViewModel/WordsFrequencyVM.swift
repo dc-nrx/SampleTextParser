@@ -34,6 +34,8 @@ public final class WordsFrequencyVM {
 	/// The screen name associated with the view model (for analytics purposes).
 	public var screenName = "WordsFrequency"
 	
+	public var loadingInProgress: Bool { updateTask != nil || resetTask != nil }
+	
 	/// The text content that is being analyzed for word frequencies.
 	public private(set) var textProvider: TextProvider
 

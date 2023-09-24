@@ -27,7 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		window = UIWindow(frame: UIScreen.main.bounds)
 		
 		let rootVC = UIStoryboard(name: "WordsFrequencyVC", bundle: nil).instantiateInitialViewController() as! WordsFrequencyVC
-		rootVC.vm = dependencyContainer.makeWordsFrequencyVM(filepath: LocalTextFile.romeoAndJuliet.path)
+		rootVC.vm = dependencyContainer.makeWordsFrequencyVM(filepath: LocalTextFile.romeoAndJuliet_x360.path)
 		window?.rootViewController = rootVC
 		
 		return true
