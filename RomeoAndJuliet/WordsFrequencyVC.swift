@@ -59,7 +59,6 @@ class WordsFrequencyVC: UIViewController {
 extension WordsFrequencyVC {
 		
 	@IBAction func onIndexSelectionChanged(sender: UISegmentedControl) {
-		// TODO: make proper map & setup initial
 		let indexKey = sortOptions[sender.selectedSegmentIndex].key
 		vm.onIndexKeyChanged(indexKey)
 	}

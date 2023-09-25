@@ -25,7 +25,8 @@ open class StandardWordsCounter: WordsCounter {
 		_ string: String,
 		config: WordsCounterConfiguration
 	) throws -> WordFrequencyMap {
-		logger.debug("Count started for \(string.prefix(16))...; matchPattern = \(config.pattern.rawValue)")
+		let pattern = "\(config.pattern)"
+		logger.debug("Count started for \(string.prefix(16))...; matchPattern = \(pattern)")
 		
 		var result = WordFrequencyMap()
 		

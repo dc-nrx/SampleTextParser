@@ -15,7 +15,7 @@ import Foundation
  and extracted from a given text. For further refinement or processing of words
  after the initial pattern matching, consider using `WordPostProcessor`.
  */
-public enum MatchPattern: String {
+public enum MatchPattern {
 	
 	/// Matches sequences of one or more alphanumeric characters.
 	case alphanumeric

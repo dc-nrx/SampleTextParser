@@ -7,7 +7,7 @@
 
 import Foundation
 
-// TODO: Case Iterable Tests like in `MatchPattern`
+// TODO: Case Iterable Tests like in `MatchPattern` for unit testing each case
 public enum LocalTextFile: String {
 	
 	case romeoAndJuliet = "Romeo-and-Juliet-fixed"
