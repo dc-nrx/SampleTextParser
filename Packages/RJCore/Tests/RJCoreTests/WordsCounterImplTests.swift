@@ -221,20 +221,24 @@ final class WordsCounterImplTests: XCTestCase {
 		XCTAssertNotNil(res["let’s"])
 	}
 	
-	/// Unfortunatelly there is a bug with storing baselines in SPM packages,
-	/// hence no proper baseline can be set here.
+	/// Unfortunatelly there is a bug with storing baselines in SPM packages, hence no proper baseline can be set for this test.
+	///	There is an interesting possibility to apply here though https://github.com/ordo-one/package-benchmark
+	/// (discussed here https://forums.swift.org/t/pitch-swift-benchmarking-infrastructure/59585/12)
 	///
-	/// The test is expected to run under 1 second.
-	func testParsingPerformance_100kLines() async throws {
+	///
+	/// The test is expected to run under 2 seconds on avarage (implemented via via `timeout`).
+	/// (This limitation might need to be altered depending on the CI/CD host performance).
+	///
+	func testParsingPerformance_400kLines() async throws {
 		measure {
-			let exp = expectation(description: "Finished")
+			let exp = expectation(description: "Words counting finished")
 			Task {
-				let fileString = try String(contentsOfFile: LocalTextFile.romeoAndJuliet_x30.path)
+				let fileString = try String(contentsOfFile: LocalTextFile.romeoAndJuliet_x120.path)
 				_ = try await sut.countWords(fileString, config: .init(.alphanumericWithDashesAndApostrophes))
 				exp.fulfill()
 			}
-			wait(for: [exp], timeout: 10.0)
-		
+			// For avarage of up to 2s, none singular is expected to exceed 2.5s.
+			wait(for: [exp], timeout: 2.5)
 		}
 	}
 }

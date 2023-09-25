@@ -21,7 +21,6 @@ open class StandardWordsCounter: WordsCounter {
 		}
 	}
 	
-	//TODO: Optimize from o(n^2) to o(n)
 	private func syncCountWords(
 		_ string: String,
 		config: WordsCounterConfiguration
@@ -29,21 +28,34 @@ open class StandardWordsCounter: WordsCounter {
 		logger.debug("Count started for \(string.prefix(16))...; matchPattern = \(config.pattern.rawValue)")
 		
 		var result = WordFrequencyMap()
-		let allStringRange = NSRange(string.startIndex..., in: string)
+		
+		// Using NSString for performace considerations related to ranges.
+		// (see `testParsingPerformance_400kLines` for measurements)
+		let nsString = string as NSString
+		let allStringRange = NSRange(location: 0, length: nsString.length)
+		
 		for match in config.pattern.regex.matches(in: string, range: allStringRange) {
-			let range = Range(match.range, in: string)! // the reason for o(n^2)
-			let word = string[range]
-			if let postProcessor = config.postProcessor,
-			   let wordsAfterSplit = try postProcessor(String(word)) {
-				logger.info("Post-processing: \(word) -> \(wordsAfterSplit)")
-				for subWord in wordsAfterSplit {
-					result[subWord.lowercased(), default: 0] += 1
-				}
-			} else {
-				result[word.lowercased(), default: 0] += 1
-			}
+			let word = nsString.substring(with: match.range)
+			try processWord(word, config: config, storeIn: &result)
 		}
 		logger.debug("Finishing count of \(string.prefix(16))...")
 		return result
 	}
+
+	private func processWord(
+		_ word: String,
+		config: WordsCounterConfiguration,
+		storeIn result: inout WordFrequencyMap
+	) throws {
+		if let postProcessor = config.postProcessor,
+		   let wordsAfterSplit = try postProcessor(String(word)) {
+			logger.info("Post-processing: \(word) -> \(wordsAfterSplit)")
+			for subWord in wordsAfterSplit {
+				result[subWord.lowercased(), default: 0] += 1
+			}
+		} else {
+			result[word.lowercased(), default: 0] += 1
+		}
+	}
+
 }
