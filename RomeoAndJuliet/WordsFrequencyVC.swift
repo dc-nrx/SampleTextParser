@@ -24,15 +24,16 @@ class WordsFrequencyVC: UIViewController {
 	/**
 	 The view model. Must be injected right after initialization, and must not be changed afterwards.
 	 
-	 - Note: I was tempted to make it `let` and pass it on init, as suggested here
+	 - Note: I was tempted to make it a `let` and pass it on init, as suggested here
 	 https://www.kodeco.com/books/advanced-ios-app-architecture ,
-	 but the proposed implementation has a significant downside of forbiding usage of interface files
-	 (see `NiblessViewController` file from the course materials:
+	 but the proposed implementation has a significant downside of forbiding interface files usage
+	 (see `NiblessViewController` file from the book materials:
 	 https://github.com/kodecocodes/arch-materials/blob/editions/4.0/05-architecture-mvvm/projects/final/KooberApp/Packages/KooberUIKit/Sources/KooberUIKit/Reusable/UIKit/NiblessComponents/NiblessViewController.swift )
 	 Thus, the decision has been made in favor of `var` + injection right after init,
-	 which is still safe if used properly. Eeven if not, leads to an obvious crash during development process).
+	 which is still perfectly safe if used properly. And even if overlooked,
+	 it would just lead to an obvious crash during development process.
 	 */
-	@Injectable var vm: WordsFrequencyVM!
+	@Injected var vm: WordsFrequencyVM!
 	
 	private typealias SortOption = (key: WordFrequencySortingKey, title: String)
 	private let sortOptions: [SortOption] = [

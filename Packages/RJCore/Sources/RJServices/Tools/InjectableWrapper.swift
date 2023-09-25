@@ -12,12 +12,12 @@ import Foundation
  
  This property wrapper is designed for dependency injection scenarios
  where the dependency cannot be passed through the initializer. In such cases,
- `@Injectable` ensures that once the dependency is provided, it cannot be
+ `@Injected` ensures that once the dependency is provided, it cannot be
  accidentally overwritten or reassigned.
  
  ````
  class ViewModel {
- @Injectable var service: SomeService?
+ @Injectable var service: SomeService!
  }
 
  let viewModel = ViewModel()
@@ -28,13 +28,13 @@ import Foundation
  - Note: Attempts to access the property before it has been set will result in a fatal error. Attempts to overwrite the injected value will be ignored.
  */
 @propertyWrapper
-public struct Injectable<T> {
+public struct Injected<T> {
    private var value: T?
 
    public var wrappedValue: T {
 	   get {
 		   guard let currentValue = value else {
-			   fatalError("Attempted to access an uninitialized @Injectable property.")
+			   fatalError("Attempted to access an uninitialized @Injected property.")
 		   }
 		   return currentValue
 	   }

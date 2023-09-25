@@ -11,7 +11,7 @@ import RJServices
 final class InjectableWrapperTests: XCTestCase {
 
 	struct Dummy {
-		@Injectable var value: Int?
+		@Injected var value: Int?
 	}
 
 	func testInitialValueIsNil() {
