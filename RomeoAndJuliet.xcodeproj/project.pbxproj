@@ -74,12 +74,12 @@
 			isa = PBXGroup;
 			children = (
 				4F3DBE842AB95676007D60B7 /* AppDelegate.swift */,
+				4FBB6ED32ABF59E2005A3ECA /* DependencyContainer.swift */,
 				4F3DBE882AB95676007D60B7 /* WordsFrequencyVC.swift */,
 				4F3DBE8A2AB95676007D60B7 /* WordsFrequencyVC.storyboard */,
 				4F3DBE8F2AB95677007D60B7 /* LaunchScreen.storyboard */,
 				4F3DBE8D2AB95677007D60B7 /* Assets.xcassets */,
 				4F3DBE922AB95677007D60B7 /* Info.plist */,
-				4FBB6ED32ABF59E2005A3ECA /* DependencyContainer.swift */,
 			);
 			path = RomeoAndJuliet;
 			sourceTree = "<group>";

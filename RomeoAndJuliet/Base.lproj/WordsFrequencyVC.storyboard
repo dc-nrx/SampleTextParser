@@ -76,10 +76,10 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="vVT-fx-5tG" secondAttribute="trailing" id="5Py-7O-q1B"/>
+                            <constraint firstAttribute="trailing" secondItem="vVT-fx-5tG" secondAttribute="trailing" id="5Py-7O-q1B"/>
                             <constraint firstItem="lNb-l7-cPj" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="c9r-oB-8QM"/>
                             <constraint firstAttribute="bottom" secondItem="vVT-fx-5tG" secondAttribute="bottom" id="dsW-eu-Jva"/>
-                            <constraint firstItem="vVT-fx-5tG" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="iIh-Ko-ErV"/>
+                            <constraint firstItem="vVT-fx-5tG" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="iIh-Ko-ErV"/>
                             <constraint firstItem="vVT-fx-5tG" firstAttribute="top" secondItem="lNb-l7-cPj" secondAttribute="bottom" id="jSX-H6-d5L"/>
                             <constraint firstItem="lNb-l7-cPj" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="u6f-3N-FU0"/>
                             <constraint firstItem="lNb-l7-cPj" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="zDM-av-qsL"/>

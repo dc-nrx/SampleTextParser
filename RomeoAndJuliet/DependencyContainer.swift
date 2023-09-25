@@ -9,6 +9,7 @@ import Foundation
 
 import RJServices
 import RJViewModel
+import UIKit
 
 public final class DependencyContainer {
 	
@@ -33,22 +34,17 @@ public final class DependencyContainer {
 	}
 }
 
-public extension DependencyContainer {
+extension DependencyContainer {
 	
-	func makeWordsFrequencyVM(
+	func makeWordsFrequencyVC(
 		filepath: String,
 		encoding: String.Encoding = .utf8,
 		configuration: WordsCounterConfiguration = .init(.alphanumericWithDashesAndApostrophes)
-	) -> WordsFrequencyVM {
+	) -> WordsFrequencyVC {
 		let textProvider = fileTextProviderFactory(filepath, encoding)
-		return WordsFrequencyVM(textProvider, wordCounter: wordsCounter, indexBuilder: indexBuilder, analytics: analytics, configuration: configuration)
+		let result = UIStoryboard(name: "WordsFrequencyVC", bundle: nil).instantiateInitialViewController() as! WordsFrequencyVC
+		result.vm = WordsFrequencyVM(textProvider, wordCounter: wordsCounter, indexBuilder: indexBuilder, analytics: analytics, configuration: configuration)
+		return result
 	}
 	
-	func makeWordsFrequencyVM(
-		text: String,
-		configuration: WordsCounterConfiguration = .init(.alphanumericWithDashesAndApostrophes)
-	) -> WordsFrequencyVM {
-		WordsFrequencyVM(text, wordCounter: wordsCounter, indexBuilder: indexBuilder, analytics: analytics, configuration: configuration)
-	}
-
 }

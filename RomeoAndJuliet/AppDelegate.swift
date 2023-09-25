@@ -25,10 +25,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 		
 		window = UIWindow(frame: UIScreen.main.bounds)
-		
-		let rootVC = UIStoryboard(name: "WordsFrequencyVC", bundle: nil).instantiateInitialViewController() as! WordsFrequencyVC
-		rootVC.vm = dependencyContainer.makeWordsFrequencyVM(filepath: LocalTextFile.romeoAndJuliet_x360.path)
-		window?.rootViewController = rootVC
+		window?.rootViewController = dependencyContainer.makeWordsFrequencyVC(filepath: LocalTextFile.romeoAndJuliet_x120.path)
 		
 		return true
 	}
