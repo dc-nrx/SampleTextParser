@@ -36,7 +36,7 @@ public final class WordsFrequencyVM {
 	
 	public var loadingInProgress: Bool { updateTask != nil || resetTask != nil }
 	
-	/// The text content that is being analyzed for word frequencies.
+	/// The provider of text content to be analyzed for word frequencies.
 	public private(set) var textProvider: TextProvider
 
 	/// The configuration details used for counting words.
@@ -179,12 +179,13 @@ private extension WordsFrequencyVM {
 	// MARK: - Cancellation
 	
 	func reloadAll() {
-		// Cancel to prevent the unnecessary `loadData` call
+		// Cancel the previous `reset task` first
+		// to prevent an unnecessary `loadData` call.
 		if let resetTask { resetTask.cancel() }
 		resetTask = Task { [resetTask, weak self] in
 			guard let self else { return }
 			defer {
-				// Avoid nullifying a subsequent reset task ref
+				// Avoid nullifying a subsequent `reset task` ref
 				if resetTask == self.resetTask {
 					self.resetTask = nil
 				}

@@ -220,4 +220,21 @@ final class WordsCounterImplTests: XCTestCase {
 		XCTAssertNotNil(res["grave-beseeming"])
 		XCTAssertNotNil(res["let’s"])
 	}
+	
+	/// Unfortunatelly there is a bug with storing baselines in SPM packages,
+	/// hence no proper baseline can be set here.
+	///
+	/// The test is expected to run under 1 second.
+	func testParsingPerformance_100kLines() async throws {
+		measure {
+			let exp = expectation(description: "Finished")
+			Task {
+				let fileString = try String(contentsOfFile: LocalTextFile.romeoAndJuliet_x30.path)
+				_ = try await sut.countWords(fileString, config: .init(.alphanumericWithDashesAndApostrophes))
+				exp.fulfill()
+			}
+			wait(for: [exp], timeout: 10.0)
+		
+		}
+	}
 }
