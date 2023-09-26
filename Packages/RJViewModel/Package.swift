@@ -23,7 +23,8 @@ let package = Package(
             dependencies: [
 				"RJViewModel",
 				.product(name: "RJServices", package: "RJCore"),
-				.product(name: "RJImplementations", package: "RJCore"),				
+				.product(name: "RJResources", package: "RJCore"),
+				.product(name: "RJImplementations", package: "RJCore"),
 			])
     ]
 )

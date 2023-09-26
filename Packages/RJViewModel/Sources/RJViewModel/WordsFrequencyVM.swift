@@ -61,6 +61,8 @@ public final class WordsFrequencyVM {
 	private var analytics: Analytics?
 	
 	private var updateTask: Task<Void, Never>? = nil
+	private var reloadRequested: Bool = false
+	
 	private var resetTask: Task<Void, Never>? = nil
 	
 	private var cancellables = Set<AnyCancellable>()
@@ -95,7 +97,7 @@ public extension WordsFrequencyVM {
 	func onAppear() {
 		analytics?.screen(screenName)
 		if state.value == .initial {
-			loadDataUsingCache()
+			loadDataUsingCache(queueIfBusy: false)
 		}
 	}
 	
@@ -104,7 +106,7 @@ public extension WordsFrequencyVM {
 		
 		sendIndexChangedEvent(from: sortingKey, to: newKey)
 		sortingKey = newKey
-		loadDataUsingCache()
+		loadDataUsingCache(queueIfBusy: true)
 	}
 	
 	func onTextProviderChange(to newTextProvider: TextProvider) {
@@ -123,14 +125,23 @@ private extension WordsFrequencyVM {
 	
 	// MARK: - Loading data
 	
-	func loadDataUsingCache() {
-		guard updateTask == nil else { return }
+	func loadDataUsingCache(queueIfBusy: Bool) {
+		guard updateTask == nil else {
+			reloadRequested = queueIfBusy
+			return
+		}
 		
 		state.send(.updateStarted)
 		updateTask = Task { [weak self] in
 			guard let self else { return }
 			
-			defer { self.updateTask = nil }
+			defer {
+				self.updateTask = nil
+				if self.reloadRequested {
+					self.reloadRequested = false
+					loadDataUsingCache(queueIfBusy: false)
+				}
+			}
 			do {
 				let frequencyMap = try await self.lazilyLoadedFrequencyMap()
 				guard !Task.isCancelled else { throw CancellationError() }
@@ -194,7 +205,7 @@ private extension WordsFrequencyVM {
 			await self.invalidateCache()
 			guard !Task.isCancelled else { return }
 			
-			self.loadDataUsingCache()
+			self.loadDataUsingCache(queueIfBusy: false)
 		}
 	}
 	
