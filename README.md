@@ -1,6 +1,8 @@
 # App Overview
 
-The app is organized into various sub-libraries for modular functionality.
+The app is organized into various sub-libraries for modular functionality. It contains a single scene `WordsFrequencyVC`, which (as the name suggests) shows word frequences in the input string/file. Various sorting options are supported.
+
+Each significant public (and sometimes private) type & method is documented, so please refer to the documentation for details. Each submodule also have a `readme` file containing basic overview of it's role and contents.  
 
 ## Sub-Libraries
 
@@ -18,9 +20,9 @@ This package, as implied by its name, comprises view models prepared for future 
 
 Given the specifics of the position, the application is tailored to be:
 
-- **Robust**: Abundant tests are incorporated (would have been even more if time permitted). The app also features extensive logs made through the system's `Logger`, proving particularly beneficial in the Xcode 15 debugger. Moreover, there's an inclusion of analytics and reporting for unhandled errors. There are no restrictions on the input language.
+- **Robust**: Abundant tests are incorporated (would have been even more if time permitted). The app also features extensive logs made through the system's `Logger`, proving particularly beneficial in the Xcode 15 debugger. Moreover, there's an inclusion of analytics and reporting for unhandled errors.
 
-- **Flexible**: The `WordsCounter` accepts configuration as an argument. It supports diverse parsing rules, post-processing, and harbors potential for further expansions. Notably, all sub-libraries, including the view models, are independent of the UI framework. They're compatible with UIKit, AppKit, or SwiftUI (possibly necessitating some supplementary components for the latter).
+- **Flexible**: The `WordsCounter` accepts configuration as an argument. It supports diverse parsing rules, post-processing, and harbors potential for further expansions. Notably, all sub-libraries, including the view models, are independent of the UI framework. They're compatible with UIKit, AppKit, or SwiftUI (possibly necessitating some supplementary components for the latter). There are no restrictions on the input language.
 
 - **Backward Compatible**: Designed to be iOS 14+ compatible. (had to use the older `NSRegularExpression` as opposed to the modern `Regex`)
 
