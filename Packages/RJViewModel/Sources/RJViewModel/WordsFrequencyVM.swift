@@ -33,7 +33,7 @@ public final class WordsFrequencyVM {
 	/// The screen name associated with the view model (for analytics purposes).
 	public var screenName = "WordsFrequency"
 	
-	public var loadingInProgress: Bool { updateRowsTask != nil || resetTask != nil }
+	public var loadingInProgress: Bool { updateRowsTask != nil }
 	
 	/// The provider of text content to be analyzed for word frequencies.
 	public private(set) var textProvider: TextProvider
@@ -61,8 +61,6 @@ public final class WordsFrequencyVM {
 	
 	private var updateRowsTask: Task<Void, Never>? = nil
 	private var updateQueued: Bool = false
-	
-	private var resetTask: Task<Void, Never>? = nil
 	
 	private var cancellables = Set<AnyCancellable>()
 	private let logger = Logger(subsystem: "RJViewModel", category: "WordsFrequencyVM")
@@ -169,6 +167,7 @@ private extension WordsFrequencyVM {
 		self.state.send(.finished)
 	}
 	
+	/// Shold be called from `updateRowItems`  only to preserve correct state updates.
 	func lazilyLoadedFrequencyMap() async throws -> WordFrequencyMap {
 		if let frequencyMapCache { return frequencyMapCache }
 		
@@ -179,6 +178,7 @@ private extension WordsFrequencyVM {
 		return result
 	}
 	
+	/// Shold be called from `updateRowItems`  only to preserve correct state updates.
 	func lazilyLoadedIndex(_ map: WordFrequencyMap, _ key: WordFrequencySortingKey) async -> IndexTable {
 		if let cachedTable = indexTablesCache[key] { return cachedTable }
 		
@@ -188,6 +188,7 @@ private extension WordsFrequencyVM {
 		return result
 	}
 	
+	/// Shold be called from `updateRowItems`  only to preserve correct state updates.
 	func buildRowItems(map: WordFrequencyMap, indexTable: IndexTable) throws -> [Item] {
 		self.state.send(.updatingRows)
 		return try indexTable.map { word in

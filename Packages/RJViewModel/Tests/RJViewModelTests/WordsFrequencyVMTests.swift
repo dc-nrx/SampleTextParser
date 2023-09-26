@@ -66,14 +66,13 @@ final class RJViewModelTests: XCTestCase {
 	}
 	
 	func testIndexChange_afterInitialLoad() async {
-		let exp1 = expect(sut, state: .finished)
 		sut.onAppear()
-		await fulfillment(of: [exp1])
+		await waitUntil(sut, in: .finished)
 		XCTAssertEqual(sut.rowItems.value.map { $0.frequency }, [3, 1, 1])
 		
-		let exp2 = expect(sut, state: .finished)
 		sut.onIndexKeyChanged(.alphabetical)
-		await fulfillment(of: [exp2], timeout: 0.5)
+		await waitUntil(sut, in: .finished)
+
 		let res = sut.rowItems.value.map { $0.word }
 		XCTAssertEqual(res, ["aaa", "abc", "ddd"])
 	}
@@ -100,11 +99,12 @@ final class RJViewModelTests: XCTestCase {
 	
 	func testIndexKeyChanged_betweenIndexingAndBuildingRows() async {
 		sut.onAppear()
-		execute(sut, rightAfter: .buildingIndex) {
-			self.sut.onIndexKeyChanged(.alphabetical)
-		}
-		await fulfillment(of: [expect(sut, state: .finished, dropCurrent: false)])
-		await fulfillment(of: [expect(sut, state: .finished, dropCurrent: false)])
+		
+		await waitUntil(sut, in: .buildingIndex)
+		self.sut.onIndexKeyChanged(.alphabetical)
+		
+		await waitUntil(sut, in: .finished)
+		await waitUntil(sut, in: .finished)
 				
 		XCTAssertEqual(sut.rowItems.value.first!.word, "aaa")
 	}
@@ -115,38 +115,6 @@ final class RJViewModelTests: XCTestCase {
 
 private extension RJViewModelTests {
 
-	func execute(
-		_ sut: WordsFrequencyVM,
-		rightAfter state: WordsFrequencyVM.State,
-		action: @escaping () -> ()
-	) {
-		sut.state
-			.dropFirst()	// drop the current value
-			.filter { $0 == state }
-			.first()	// avoid accidental re-fulfillment of the `exp` in non-atomic tests
-			.sink { _ in
-				action()
-			}
-			.store(in: &cancellables)
-	}
-	
-	func expect(
-		_ sut: WordsFrequencyVM,
-		state: WordsFrequencyVM.State,
-		dropCurrent: Bool = true
-	) -> XCTestExpectation {
-		let exp = expectation(description: "`.finished` state should be called")
-		sut.state
-			.dropFirst(dropCurrent ? 1 : 0)
-			.filter { $0 == state }
-			.first()	// avoid accidental re-fulfillment of the `exp` in non-atomic tests
-			.sink { _ in
-				exp.fulfill()
-			}
-			.store(in: &cancellables)
-		return exp
-	}
-	
 	func expectCorrectStatesSequence(
 		_ sut: WordsFrequencyVM,
 		_ expectedSequence: [WordsFrequencyVM.State]
@@ -162,20 +130,13 @@ private extension RJViewModelTests {
 		return exp
 	}
 	
-	/// A helper function to fix broken tests
-	func printStateChanges(_ sut: WordsFrequencyVM) {
-		sut.state
-			.sink { print("state changed to \($0)") }
-			.store(in: &cancellables)
+	func waitUntil(_ vm: WordsFrequencyVM, in state: WordsFrequencyVM.State) async {
+		await withCheckedContinuation { continuation in
+			vm.state
+				.filter { $0 == state }
+				.first()
+				.sink { _ in continuation.resume() }
+				.store(in: &cancellables)
+		}
 	}
-	
-//	func waitForCancelledState() async {
-//		await withCheckedContinuation { continuation in
-//			state
-//				.filter { $0 == .cancelled}
-//				.first()
-//				.sink { _ in continuation.resume() }
-//				.store(in: &cancellables)
-//		}
-//	}
 }
