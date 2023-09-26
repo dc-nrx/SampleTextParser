@@ -17,7 +17,6 @@ public extension WordsFrequencyVM {
 		case buildingIndex
 		case updatingRows
 		case finished
-		case cancelling
 		case cancelled
 		case error(description: String)
 	}
@@ -97,7 +96,7 @@ public extension WordsFrequencyVM {
 	func onAppear() {
 		analytics?.screen(screenName)
 		if state.value == .initial {
-			updateRowsInBackground(queueIfBusy: false)
+			requestRowsUpdate(overwriteCurrentTask: false)
 		}
 	}
 	
@@ -106,17 +105,17 @@ public extension WordsFrequencyVM {
 		
 		sendIndexChangedEvent(from: sortingKey, to: newKey)
 		sortingKey = newKey
-		updateRowsInBackground(queueIfBusy: true)
+		requestRowsUpdate()
 	}
 	
 	func onTextProviderChange(to newTextProvider: TextProvider) {
 		textProvider = newTextProvider
-		reloadAll()
+		requestRowsUpdate(clearCache: true)
 	}
 	
 	func onConfigChange(to newConfig: WordsCounterConfiguration) {
 		configuration = newConfig
-		reloadAll()
+		requestRowsUpdate(clearCache: true)
 	}
 }
 
@@ -125,10 +124,15 @@ private extension WordsFrequencyVM {
 	
 	// MARK: - Loading data
 	
-	func updateRowsInBackground(queueIfBusy: Bool) {
+	func requestRowsUpdate(
+		overwriteCurrentTask: Bool = true,
+		clearCache: Bool = false
+	) {
 		guard updateRowsTask == nil else {
-			// keep `updateQueued == true` if requested at least once
-			updateQueued = updateQueued || queueIfBusy
+			if overwriteCurrentTask {
+				updateQueued = true
+				updateRowsTask?.cancel()
+			}
 			return
 		}
 		
@@ -136,13 +140,17 @@ private extension WordsFrequencyVM {
 		updateRowsTask = Task { [weak self] in
 			guard let self else { return }
 			
-			do { try await updateRowItems() }
-			catch { handle(error: error) }
+			if clearCache {
+				self.clearCache()
+			}
+			
+			do { try await self.updateRowItems() }
+			catch { self.handle(error: error) }
 			
 			self.updateRowsTask = nil
 			if self.updateQueued {
 				self.updateQueued = false
-				updateRowsInBackground(queueIfBusy: false)
+				requestRowsUpdate(overwriteCurrentTask: false)
 			}
 		}
 	}
@@ -188,59 +196,13 @@ private extension WordsFrequencyVM {
 		}
 	}
 
-	// MARK: - Cancellation
-	
-	func reloadAll() {
-		// Cancel the previous `reset task` first
-		// to prevent an unnecessary `loadData` call.
-		if let resetTask { resetTask.cancel() }
-		resetTask = Task { [resetTask, weak self] in
-			guard let self else { return }
-			defer {
-				// Avoid nullifying a subsequent `reset task` ref
-				if resetTask == self.resetTask {
-					self.resetTask = nil
-				}
-			}
-			
-			await self.invalidateCache()
-			guard !Task.isCancelled else { return }
-			
-			self.updateRowsInBackground(queueIfBusy: false)
-		}
-	}
-	
-	func invalidateCache() async {
-		if let updateRowsTask, state.value != .cancelling {
-			state.send(.cancelling)
-			updateRowsTask.cancel()
-			await waitForCancelledState()
-			self.updateRowsTask = nil
-		}
-		
-		clearCache()
-		state.send(.initial)
-	}
-	
+	// MARK: - Misc
+
 	func clearCache() {
 		indexTablesCache = [WordFrequencySortingKey: IndexTable]()
 		frequencyMapCache = nil
 		rowItems.send([])
 	}
-	
-	func waitForCancelledState() async {
-		await withCheckedContinuation { continuation in
-			state
-				.dropFirst()
-				.filter { $0 == .cancelled}
-				.first()
-				.sink { _ in continuation.resume() }
-				.store(in: &cancellables)
-		}
-	}
-
-	// MARK: - Misc
-
 	
 	func handle(error: Error) {
 		if error is CancellationError {

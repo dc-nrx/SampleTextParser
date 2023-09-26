@@ -168,4 +168,14 @@ private extension RJViewModelTests {
 			.sink { print("state changed to \($0)") }
 			.store(in: &cancellables)
 	}
+	
+//	func waitForCancelledState() async {
+//		await withCheckedContinuation { continuation in
+//			state
+//				.filter { $0 == .cancelled}
+//				.first()
+//				.sink { _ in continuation.resume() }
+//				.store(in: &cancellables)
+//		}
+//	}
 }
