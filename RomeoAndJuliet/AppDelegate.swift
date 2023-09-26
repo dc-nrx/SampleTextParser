@@ -24,12 +24,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 		fileTextProviderFactory: FileTextProvider.init,
 		analytics: nil)
 	
+	/// Please change the value to experiment with different inputs. More text files can be added by
+	/// copying them into `./Packages/RJCore/Sources/RJResources/Files`,
+	/// and adding a corresponding entry to `LocalTextFile` enum.
+	private let initialInputFile = LocalTextFile.romeoAndJuliet_x120
+	
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 		
 		logger.info("entering \(#function)")
 		
 		window = UIWindow(frame: UIScreen.main.bounds)
-		window?.rootViewController = dependencyContainer.makeWordsFrequencyVC(filepath: LocalTextFile.romeoAndJuliet_x120.path)
+		window?.rootViewController = dependencyContainer.makeWordsFrequencyVC(filepath: initialInputFile.path)
 		
 		logger.info("returning from \(#function)")
 		return true

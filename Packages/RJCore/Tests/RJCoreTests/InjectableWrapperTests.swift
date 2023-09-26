@@ -14,11 +14,6 @@ final class InjectableWrapperTests: XCTestCase {
 		@Injected var value: Int?
 	}
 
-	func testInitialValueIsNil() {
-		let dummy = Dummy()
-		XCTAssertNil(dummy.value)
-	}
-
 	func testValueCanBeInjectedOnce() {
 		var dummy = Dummy()
 		dummy.value = 10

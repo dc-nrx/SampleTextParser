@@ -13,6 +13,7 @@
 		4F3DBE8C2AB95676007D60B7 /* WordsFrequencyVC.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F3DBE8A2AB95676007D60B7 /* WordsFrequencyVC.storyboard */; };
 		4F3DBE8E2AB95677007D60B7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4F3DBE8D2AB95677007D60B7 /* Assets.xcassets */; };
 		4F3DBE912AB95677007D60B7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4F3DBE8F2AB95677007D60B7 /* LaunchScreen.storyboard */; };
+		4F4EEDAF2AC2FCE5000E731A /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 4F4EEDAE2AC2FCE5000E731A /* README.md */; };
 		4FBB6ED42ABF59E2005A3ECA /* DependencyContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4FBB6ED32ABF59E2005A3ECA /* DependencyContainer.swift */; };
 		4FC896F52ABD855A00AD807F /* RJImplementations in Frameworks */ = {isa = PBXBuildFile; productRef = 4FC896F42ABD855A00AD807F /* RJImplementations */; };
 		4FF142CA2ABDDE13006BC1EE /* RJResources in Frameworks */ = {isa = PBXBuildFile; productRef = 4FF142C92ABDDE13006BC1EE /* RJResources */; };
@@ -28,6 +29,7 @@
 		4F3DBE922AB95677007D60B7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4F3DBEB52AB9754E007D60B7 /* RJCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = RJCore; path = Packages/RJCore; sourceTree = "<group>"; };
 		4F3DBEB72AB97793007D60B7 /* RJViewModel */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = RJViewModel; path = Packages/RJViewModel; sourceTree = "<group>"; };
+		4F4EEDAE2AC2FCE5000E731A /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		4FBB6ED32ABF59E2005A3ECA /* DependencyContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DependencyContainer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -73,6 +75,7 @@
 		4F3DBE832AB95676007D60B7 /* RomeoAndJuliet */ = {
 			isa = PBXGroup;
 			children = (
+				4F4EEDAE2AC2FCE5000E731A /* README.md */,
 				4F3DBE842AB95676007D60B7 /* AppDelegate.swift */,
 				4FBB6ED32ABF59E2005A3ECA /* DependencyContainer.swift */,
 				4F3DBE882AB95676007D60B7 /* WordsFrequencyVC.swift */,
@@ -158,6 +161,7 @@
 			files = (
 				4F3DBE912AB95677007D60B7 /* LaunchScreen.storyboard in Resources */,
 				4F3DBE8E2AB95677007D60B7 /* Assets.xcassets in Resources */,
+				4F4EEDAF2AC2FCE5000E731A /* README.md in Resources */,
 				4F3DBE8C2AB95676007D60B7 /* WordsFrequencyVC.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

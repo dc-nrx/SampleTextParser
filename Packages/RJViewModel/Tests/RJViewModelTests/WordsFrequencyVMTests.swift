@@ -153,10 +153,8 @@ final class RJViewModelTests: XCTestCase {
 		XCTAssertNil(customSut.rowItems.value.first { $0.word == "a-la-la"} )
 	}
 
-	// TODO: implement extra bunch of tests mixing update and re-update requests
-	
 	// TODO: implement bunch of tests for error reporting and recovery from them
-
+	// TODO: implement extra bunch of tests mixing update and re-update requests
 }
 
 private extension RJViewModelTests {
