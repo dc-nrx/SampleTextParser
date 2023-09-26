@@ -1,34 +1,34 @@
-# RJViewModel: Internal Documentation
+## RJViewModel Module Documentation
 
 `RJViewModel` is an internal Swift package crafted to handle word frequencies within our application.
 This module is designed as a submodule for our main app, aiming to efficiently track and manage the 
 frequencies of words. The use of Apple's `Combine` framework ensures reactive updates, while `OSLog`
 assists in precise and streamlined logging.
 
-## Key Components
+### Key Components
 
-### 1. WordsFrequencyVM
+#### 1. WordsFrequencyVM
 The central ViewModel class that governs the word frequencies.
 
-### 2. State Management
+#### 2. State Management
 Efficiently tracks the state of the view model, facilitating unit test tunings and providing insights
 into various operations like word counting, row updating, etc.
 
-### 3. Configuration
+#### 3. Configuration
 While `TextProvider` acts as the source of text, `WordsCounterConfiguration` provides specific details 
 for word counting. (see `RJCore` for additional details)
 
-### 4. Caching System
+#### 4. Caching System
 To optimize performance, a caching mechanism is implemented. This takes care of frequency maps and index
 tables, thus enabling optimized row updates.
 
-### 5. Error & Logging Mechanisms
+#### 5. Error & Logging Mechanisms
 Errors are effectively captured and logged. This distinction between user-oriented messages and developer
 logs ensures clarity during debugging sessions.
 
-## Usage
+### Usage
 
-### Initialization
+#### Initialization
 
 Create an instance of `WordsFrequencyVM`:
 ```swift
@@ -41,7 +41,7 @@ let viewModel = WordsFrequencyVM(
     initialSortingKey: .mostFrequent
 )
 ```
-### Event Handling
+#### Event Handling
 
 - **View's Appearance**:
   ```swift
@@ -63,9 +63,7 @@ let viewModel = WordsFrequencyVM(
   viewModel.onConfigChange(to: newConfig)
   ```
 
-Copy everything inside the code block.
-
-### State Tracking
+#### State Tracking
 
 For unit testing and other debugging purposes, the state and rowItems can be observed using Combine's
 Publishers:
@@ -81,7 +79,7 @@ viewModel.rowItems.sink { newItems in
 }
 ```
 
-## Development Notes
+### Development Notes
 
 As this is an internal module, direct access to the app's subsystems, and other modules is expected.
 
