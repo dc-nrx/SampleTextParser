@@ -34,7 +34,7 @@ public final class WordsFrequencyVM {
 	/// The screen name associated with the view model (for analytics purposes).
 	public var screenName = "WordsFrequency"
 	
-	public var loadingInProgress: Bool { updateTask != nil || resetTask != nil }
+	public var loadingInProgress: Bool { buildRowsTask != nil || resetTask != nil }
 	
 	/// The provider of text content to be analyzed for word frequencies.
 	public private(set) var textProvider: TextProvider
@@ -60,8 +60,8 @@ public final class WordsFrequencyVM {
 	private var indexBuilder: WordFrequencyIndexBuilder
 	private var analytics: Analytics?
 	
-	private var updateTask: Task<Void, Never>? = nil
-	private var reloadRequested: Bool = false
+	private var buildRowsTask: Task<Void, Never>? = nil
+	private var updateQueued: Bool = false
 	
 	private var resetTask: Task<Void, Never>? = nil
 	
@@ -97,7 +97,7 @@ public extension WordsFrequencyVM {
 	func onAppear() {
 		analytics?.screen(screenName)
 		if state.value == .initial {
-			loadDataUsingCache(queueIfBusy: false)
+			buildRowsInBackground(queueIfBusy: false)
 		}
 	}
 	
@@ -106,7 +106,7 @@ public extension WordsFrequencyVM {
 		
 		sendIndexChangedEvent(from: sortingKey, to: newKey)
 		sortingKey = newKey
-		loadDataUsingCache(queueIfBusy: true)
+		buildRowsInBackground(queueIfBusy: true)
 	}
 	
 	func onTextProviderChange(to newTextProvider: TextProvider) {
@@ -125,47 +125,46 @@ private extension WordsFrequencyVM {
 	
 	// MARK: - Loading data
 	
-	func loadDataUsingCache(queueIfBusy: Bool) {
-		guard updateTask == nil else {
-			reloadRequested = queueIfBusy
+	func buildRowsInBackground(queueIfBusy: Bool) {
+		guard buildRowsTask == nil else {
+			// avoid cancellation of previous re-build request
+			updateQueued = updateQueued || queueIfBusy
 			return
 		}
 		
 		state.send(.updateStarted)
-		updateTask = Task { [weak self] in
+		buildRowsTask = Task { [weak self] in
 			guard let self else { return }
-			
-			defer {
-				self.updateTask = nil
-				if self.reloadRequested {
-					self.reloadRequested = false
-					loadDataUsingCache(queueIfBusy: false)
-				}
-			}
 			do {
-				let frequencyMap = try await self.lazilyLoadedFrequencyMap()
-				guard !Task.isCancelled else { throw CancellationError() }
-
-				let indexTable = await self.lazilyLoadedIndex(frequencyMap, sortingKey)
-				guard !Task.isCancelled else { throw CancellationError() }
-				
-				self.state.send(.updatingRows)
-				let updatedItems = try indexTable.map { word in
-					guard let frequency = frequencyMap[word] else { throw GenericError.unexpectedNil(file: #file, line: #line) }
-					return Item(word: word, frequency: frequency)
-				}
-				guard !Task.isCancelled else { throw CancellationError() }
-
-				self.rowItems.send(updatedItems)
-				self.state.send(.finished)
+				try await buildRowItems()
 			} catch {
-				if error is CancellationError {
-					state.send(.cancelled)
-				} else {
-					handle(error: error)
-				}
+				handle(error: error)
+			}
+			
+			self.buildRowsTask = nil
+			if self.updateQueued {
+				self.updateQueued = false
+				buildRowsInBackground(queueIfBusy: false)
 			}
 		}
+	}
+	
+	func buildRowItems() async throws {
+		let frequencyMap = try await self.lazilyLoadedFrequencyMap()
+		guard !Task.isCancelled else { throw CancellationError() }
+
+		let indexTable = await self.lazilyLoadedIndex(frequencyMap, sortingKey)
+		guard !Task.isCancelled else { throw CancellationError() }
+		
+		self.state.send(.updatingRows)
+		let updatedItems = try indexTable.map { word in
+			guard let frequency = frequencyMap[word] else { throw GenericError.unexpectedNil(file: #file, line: #line) }
+			return Item(word: word, frequency: frequency)
+		}
+		guard !Task.isCancelled else { throw CancellationError() }
+
+		self.rowItems.send(updatedItems)
+		self.state.send(.finished)
 	}
 	
 	func lazilyLoadedFrequencyMap() async throws -> WordFrequencyMap {
@@ -205,16 +204,16 @@ private extension WordsFrequencyVM {
 			await self.invalidateCache()
 			guard !Task.isCancelled else { return }
 			
-			self.loadDataUsingCache(queueIfBusy: false)
+			self.buildRowsInBackground(queueIfBusy: false)
 		}
 	}
 	
 	func invalidateCache() async {
-		if let updateTask, state.value != .cancelling {
+		if let buildRowsTask, state.value != .cancelling {
 			state.send(.cancelling)
-			updateTask.cancel()
+			buildRowsTask.cancel()
 			await waitForCancelledState()
-			self.updateTask = nil
+			self.buildRowsTask = nil
 		}
 		
 		clearCache()
@@ -240,14 +239,19 @@ private extension WordsFrequencyVM {
 
 	// MARK: - Misc
 
+	
 	func handle(error: Error) {
-		let userMessage = error.localizedDescription
-		state.send(.error(description: userMessage))
-		
-		let devDescription = error.localizedDescription
-		logger.error("\(devDescription)")
-		
-		analytics?.error(error)
+		if error is CancellationError {
+			state.send(.cancelled)
+		} else {
+			let userMessage = error.localizedDescription
+			state.send(.error(description: userMessage))
+			
+			let devDescription = error.localizedDescription
+			logger.error("\(devDescription)")
+			
+			analytics?.error(error)
+		}
 	}
 	
 	func setupLogging() {
