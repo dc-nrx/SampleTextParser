@@ -72,7 +72,7 @@ extension WordsFrequencyVC {
 		
 	@IBAction func onIndexSelectionChanged(sender: UISegmentedControl) {
 		let indexKey = sortOptions[sender.selectedSegmentIndex].key
-		vm.onIndexKeyChanged(indexKey)
+		vm.onSortingKeyChanged(indexKey)
 	}
 }
 
@@ -87,7 +87,7 @@ private extension WordsFrequencyVC {
 		
 		guard let selectedIndex = sortOptions.firstIndex(where: { vm.sortingKey == $0.key }) else {
 			assertionFailure("\(vm.sortingKey) is not in \(sortOptions)")
-			vm.onIndexKeyChanged(sortOptions[0].key)
+			vm.onSortingKeyChanged(sortOptions[0].key)
 			indexSegmentControl.selectedSegmentIndex = 0
 			return
 		}

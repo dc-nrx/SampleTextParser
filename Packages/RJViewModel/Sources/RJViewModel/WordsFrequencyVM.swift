@@ -110,10 +110,10 @@ public extension WordsFrequencyVM {
 		}
 	}
 	
-	func onIndexKeyChanged(_ newKey: WordFrequencySortingKey) {
+	func onSortingKeyChanged(_ newKey: WordFrequencySortingKey) {
 		guard sortingKey != newKey else { return }
 		
-		sendIndexChangedEvent(from: sortingKey, to: newKey)
+		sendSortingKeyChangedEvent(from: sortingKey, to: newKey)
 		sortingKey = newKey
 		requestRowsUpdate()
 	}
@@ -270,7 +270,7 @@ private extension WordsFrequencyVM {
 		.store(in: &cancellables)
 	}
 	
-	func sendIndexChangedEvent(
+	func sendSortingKeyChangedEvent(
 		from: WordFrequencySortingKey,
 		to: WordFrequencySortingKey
 	) {

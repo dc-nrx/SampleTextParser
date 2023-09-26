@@ -48,10 +48,10 @@ final class RJViewModelTests: XCTestCase {
 	}
 	
 	func testOnIndexKeyChanged() {
-		sut.onIndexKeyChanged(.mostFrequent)
+		sut.onSortingKeyChanged(.mostFrequent)
 		XCTAssertEqual(sut.sortingKey, .mostFrequent)
 		
-		sut.onIndexKeyChanged(.alphabetical)
+		sut.onSortingKeyChanged(.alphabetical)
 		XCTAssertEqual(sut.sortingKey, .alphabetical)
 	}
 	
@@ -61,7 +61,7 @@ final class RJViewModelTests: XCTestCase {
 		await fulfillment(of: [exp1], timeout: 0.1)
 		
 		let exp2 = expectCorrectStatesSequence(sut, wordsCountedNoIndexStateSequence)
-		sut.onIndexKeyChanged(.alphabetical)
+		sut.onSortingKeyChanged(.alphabetical)
 		await fulfillment(of: [exp2], timeout: 0.1)
 	}
 	
@@ -70,7 +70,7 @@ final class RJViewModelTests: XCTestCase {
 		await waitUntil(sut, in: .finished)
 		XCTAssertEqual(sut.rowItems.value.map { $0.frequency }, [3, 1, 1])
 		
-		sut.onIndexKeyChanged(.alphabetical)
+		sut.onSortingKeyChanged(.alphabetical)
 		await waitUntil(sut, in: .finished)
 
 		let res = sut.rowItems.value.map { $0.word }
@@ -101,7 +101,7 @@ final class RJViewModelTests: XCTestCase {
 		sut.onAppear()
 		
 		await waitUntil(sut, in: .buildingIndex)
-		sut.onIndexKeyChanged(.alphabetical)
+		sut.onSortingKeyChanged(.alphabetical)
 		
 		await waitUntil(sut, in: .finished)
 		await waitUntil(sut, in: .finished)

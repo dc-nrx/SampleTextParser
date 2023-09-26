@@ -1,6 +1,6 @@
 # App Overview
 
-The app is organized into various sub-libraries for modular functionality. It contains a single scene `WordsFrequencyVC`, which (as the name suggests) shows word frequences in the input string/file. Various sorting options are supported.
+The app is organized into various sub-libraries for modular functionality. It contains a single scene `WordsFrequencyVC`, which (as the name suggests) shows word frequencies in the input string/file. Various sorting options are supported.
 
 Each significant public (and sometimes private) type & method is documented, so please refer to the documentation for details. Each submodule also have a `readme` file containing basic overview of it's role and contents.  
 

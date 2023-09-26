@@ -11,8 +11,12 @@ import RJServices
 import RJViewModel
 import UIKit
 
+/**
+ This class serves as a factory for view controllers used throughout the app.
+ */
 public final class DependencyContainer {
 	
+	/// Required to keep the `DependencyContainer` agnostic about `TextProvider` implementation.
 	public typealias FileTextProviderFactory = (_ path: String, String.Encoding) -> TextProvider
 	
 	private let wordsCounter: WordsCounter
