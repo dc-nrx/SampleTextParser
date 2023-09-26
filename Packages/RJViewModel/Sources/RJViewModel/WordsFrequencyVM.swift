@@ -34,7 +34,7 @@ public final class WordsFrequencyVM {
 	/// The screen name associated with the view model (for analytics purposes).
 	public var screenName = "WordsFrequency"
 	
-	public var loadingInProgress: Bool { buildRowsTask != nil || resetTask != nil }
+	public var loadingInProgress: Bool { updateRowsTask != nil || resetTask != nil }
 	
 	/// The provider of text content to be analyzed for word frequencies.
 	public private(set) var textProvider: TextProvider
@@ -60,7 +60,7 @@ public final class WordsFrequencyVM {
 	private var indexBuilder: WordFrequencyIndexBuilder
 	private var analytics: Analytics?
 	
-	private var buildRowsTask: Task<Void, Never>? = nil
+	private var updateRowsTask: Task<Void, Never>? = nil
 	private var updateQueued: Bool = false
 	
 	private var resetTask: Task<Void, Never>? = nil
@@ -97,7 +97,7 @@ public extension WordsFrequencyVM {
 	func onAppear() {
 		analytics?.screen(screenName)
 		if state.value == .initial {
-			buildRowsInBackground(queueIfBusy: false)
+			updateRowsInBackground(queueIfBusy: false)
 		}
 	}
 	
@@ -106,7 +106,7 @@ public extension WordsFrequencyVM {
 		
 		sendIndexChangedEvent(from: sortingKey, to: newKey)
 		sortingKey = newKey
-		buildRowsInBackground(queueIfBusy: true)
+		updateRowsInBackground(queueIfBusy: true)
 	}
 	
 	func onTextProviderChange(to newTextProvider: TextProvider) {
@@ -125,42 +125,36 @@ private extension WordsFrequencyVM {
 	
 	// MARK: - Loading data
 	
-	func buildRowsInBackground(queueIfBusy: Bool) {
-		guard buildRowsTask == nil else {
-			// avoid cancellation of previous re-build request
+	func updateRowsInBackground(queueIfBusy: Bool) {
+		guard updateRowsTask == nil else {
+			// keep `updateQueued == true` if requested at least once
 			updateQueued = updateQueued || queueIfBusy
 			return
 		}
 		
 		state.send(.updateStarted)
-		buildRowsTask = Task { [weak self] in
+		updateRowsTask = Task { [weak self] in
 			guard let self else { return }
-			do {
-				try await buildRowItems()
-			} catch {
-				handle(error: error)
-			}
 			
-			self.buildRowsTask = nil
+			do { try await updateRowItems() }
+			catch { handle(error: error) }
+			
+			self.updateRowsTask = nil
 			if self.updateQueued {
 				self.updateQueued = false
-				buildRowsInBackground(queueIfBusy: false)
+				updateRowsInBackground(queueIfBusy: false)
 			}
 		}
 	}
 	
-	func buildRowItems() async throws {
+	func updateRowItems() async throws {
 		let frequencyMap = try await self.lazilyLoadedFrequencyMap()
 		guard !Task.isCancelled else { throw CancellationError() }
 
 		let indexTable = await self.lazilyLoadedIndex(frequencyMap, sortingKey)
 		guard !Task.isCancelled else { throw CancellationError() }
 		
-		self.state.send(.updatingRows)
-		let updatedItems = try indexTable.map { word in
-			guard let frequency = frequencyMap[word] else { throw GenericError.unexpectedNil(file: #file, line: #line) }
-			return Item(word: word, frequency: frequency)
-		}
+		let updatedItems = try buildRowItems(map: frequencyMap, indexTable: indexTable)
 		guard !Task.isCancelled else { throw CancellationError() }
 
 		self.rowItems.send(updatedItems)
@@ -185,6 +179,14 @@ private extension WordsFrequencyVM {
 		indexTablesCache[key] = result
 		return result
 	}
+	
+	func buildRowItems(map: WordFrequencyMap, indexTable: IndexTable) throws -> [Item] {
+		self.state.send(.updatingRows)
+		return try indexTable.map { word in
+			guard let frequency = map[word] else { throw GenericError.unexpectedNil(file: #file, line: #line) }
+			return Item(word: word, frequency: frequency)
+		}
+	}
 
 	// MARK: - Cancellation
 	
@@ -204,16 +206,16 @@ private extension WordsFrequencyVM {
 			await self.invalidateCache()
 			guard !Task.isCancelled else { return }
 			
-			self.buildRowsInBackground(queueIfBusy: false)
+			self.updateRowsInBackground(queueIfBusy: false)
 		}
 	}
 	
 	func invalidateCache() async {
-		if let buildRowsTask, state.value != .cancelling {
+		if let updateRowsTask, state.value != .cancelling {
 			state.send(.cancelling)
-			buildRowsTask.cancel()
+			updateRowsTask.cancel()
 			await waitForCancelledState()
-			self.buildRowsTask = nil
+			self.updateRowsTask = nil
 		}
 		
 		clearCache()
