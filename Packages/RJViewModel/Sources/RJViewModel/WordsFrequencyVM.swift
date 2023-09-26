@@ -20,9 +20,19 @@ public extension WordsFrequencyVM {
 		case cancelled
 		case error(description: String)
 	}
-	
+
 	/// Represents an item in the word frequency list.
 	typealias Item = (word: WordFrequencyMap.Key, frequency: WordFrequencyMap.Value)
+	
+	private enum QueuedRequest: Int, Comparable {
+		case none = 0
+		case usingExistedCache
+		case clearingCache
+		
+		public static func < (lhs: QueuedRequest, rhs: QueuedRequest) -> Bool {
+			return lhs.rawValue < rhs.rawValue
+		}
+	}
 }
 
 /// Represents the view model for handling word frequencies.
@@ -60,7 +70,7 @@ public final class WordsFrequencyVM {
 	private var analytics: Analytics?
 	
 	private var updateRowsTask: Task<Void, Never>? = nil
-	private var updateQueued: Bool = false
+	private var queuedRequest: QueuedRequest = .none
 	
 	private var cancellables = Set<AnyCancellable>()
 	private let logger = Logger(subsystem: "RJViewModel", category: "WordsFrequencyVM")
@@ -128,7 +138,8 @@ private extension WordsFrequencyVM {
 	) {
 		guard updateRowsTask == nil else {
 			if overwriteCurrentTask {
-				updateQueued = true
+				let currentRequest: QueuedRequest = clearCache ? .clearingCache : .usingExistedCache
+				queuedRequest = max(queuedRequest, currentRequest)
 				updateRowsTask?.cancel()
 			}
 			return
@@ -138,16 +149,19 @@ private extension WordsFrequencyVM {
 		updateRowsTask = Task { [weak self] in
 			guard let self else { return }
 			
-			if clearCache {
-				self.clearCache()
-			}
+			if clearCache { self.clearCache() }
 			
 			do { try await self.updateRowItems() }
 			catch { self.handle(error: error) }
 			
 			self.updateRowsTask = nil
-			if self.updateQueued {
-				self.updateQueued = false
+			switch queuedRequest {
+			case .none:
+				return
+			case .clearingCache:
+				self.clearCache()
+				fallthrough
+			case .usingExistedCache:
 				requestRowsUpdate(overwriteCurrentTask: false)
 			}
 		}

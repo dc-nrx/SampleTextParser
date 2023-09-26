@@ -38,6 +38,7 @@ public struct Injected<T> {
 		   }
 		   return currentValue
 	   }
+	   
 	   set {
 		   guard value == nil else {
 			   return
