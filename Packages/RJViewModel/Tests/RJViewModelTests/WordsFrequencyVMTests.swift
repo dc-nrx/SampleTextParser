@@ -101,7 +101,7 @@ final class RJViewModelTests: XCTestCase {
 		sut.onAppear()
 		
 		await waitUntil(sut, in: .buildingIndex)
-		self.sut.onIndexKeyChanged(.alphabetical)
+		sut.onIndexKeyChanged(.alphabetical)
 		
 		await waitUntil(sut, in: .finished)
 		await waitUntil(sut, in: .finished)
@@ -109,6 +109,52 @@ final class RJViewModelTests: XCTestCase {
 		XCTAssertEqual(sut.rowItems.value.first!.word, "aaa")
 	}
 
+	func testTextChanged_afterFinished() async {
+		sut.onAppear()
+		
+		await waitUntil(sut, in: .finished)
+		sut.onTextProviderChange(to: "a a b c")
+		
+		await waitUntil(sut, in: .updateStarted)
+		await waitUntil(sut, in: .finished)
+		
+		XCTAssertEqual(sut.rowItems.value.first!.word, "a")
+	}
+
+	func testTextChanged_betweenCountingWordsAndIndexing() async {
+		sut.onAppear()
+		
+		await waitUntil(sut, in: .countingWords)
+		sut.onTextProviderChange(to: "a a b c")
+		
+		await waitUntil(sut, in: .updateStarted)
+		await waitUntil(sut, in: .finished)
+		
+		XCTAssertNotNil(sut.rowItems.value.first { $0.word == "a"} )
+		XCTAssertNil(sut.rowItems.value.first { $0.word == "abc"} )
+	}
+
+	func testConfigurationChange_betweenIndexingAndBuildingRows() async {
+		
+		let customSut = WordsFrequencyVM("a-la-la", 
+										 wordCounter: StandardWordsCounter(),
+										 indexBuilder: StandardIndexBuilder(),
+										 configuration: .init(.alphanumericWithDashesAndApostrophes),
+										 initialSortingKey: .mostFrequent)
+		customSut.onAppear()
+		
+		await waitUntil(customSut, in: .updatingRows)
+		customSut.onConfigChange(to: WordsCounterConfiguration(.alphanumeric))
+		
+		await waitUntil(customSut, in: .updateStarted)
+		await waitUntil(customSut, in: .finished)
+		
+		XCTAssertNotNil(customSut.rowItems.value.first { $0.word == "la"} )
+		XCTAssertNil(customSut.rowItems.value.first { $0.word == "a-la-la"} )
+	}
+
+	// TODO: implement extra bunch of tests mixing update and re-update requests
+	
 	// TODO: implement bunch of tests for error reporting and recovery from them
 
 }

@@ -24,6 +24,8 @@ public extension WordsFrequencyVM {
 	/// Represents an item in the word frequency list.
 	typealias Item = (word: WordFrequencyMap.Key, frequency: WordFrequencyMap.Value)
 	
+	/// Represents a marker whether `requestRowsUpdate` should be called
+	/// once more after finish / cancelletion of the currently executing one.
 	private enum QueuedRequest: Int, Comparable {
 		case none = 0
 		case usingExistedCache
@@ -132,6 +134,20 @@ private extension WordsFrequencyVM {
 	
 	// MARK: - Loading data
 	
+	/**
+	 Requests an update for row items.
+
+	 Depending on the parameters provided, this method can either:
+	 - Use the existing cache
+	 - Clear and rebuild the cache
+	 - Overwrite the current task, if it's ongoing, by cancelling it and queing a subsequent execution request.
+	 In case of multiple overwrite requests, the strictest one takes priority (e.g. the one with `clearCache`, in
+	 case it has been requested at any point)
+
+	 - Parameters:
+	   - overwriteCurrentTask: A flag indicating whether the current update task should be overwritten if there's one ongoing. Default is `true`.
+	   - clearCache: A flag indicating if the cache should be cleared before updating the rows. Default is `false`.
+	 */
 	func requestRowsUpdate(
 		overwriteCurrentTask: Bool = true,
 		clearCache: Bool = false
@@ -155,18 +171,11 @@ private extension WordsFrequencyVM {
 			catch { self.handle(error: error) }
 			
 			self.updateRowsTask = nil
-			switch queuedRequest {
-			case .none:
-				return
-			case .clearingCache:
-				self.clearCache()
-				fallthrough
-			case .usingExistedCache:
-				requestRowsUpdate(overwriteCurrentTask: false)
-			}
+			executeQueuedRequestIfNeeded()
 		}
 	}
 	
+	/// The core method to update the `rowItems`.
 	func updateRowItems() async throws {
 		let frequencyMap = try await self.lazilyLoadedFrequencyMap()
 		guard !Task.isCancelled else { throw CancellationError() }
@@ -208,6 +217,20 @@ private extension WordsFrequencyVM {
 		return try indexTable.map { word in
 			guard let frequency = map[word] else { throw GenericError.unexpectedNil(file: #file, line: #line) }
 			return Item(word: word, frequency: frequency)
+		}
+	}
+	
+	func executeQueuedRequestIfNeeded() {
+		var clearCacheRequested = false
+		switch queuedRequest {
+		case .none:
+			return
+		case .clearingCache:
+			clearCacheRequested = true
+			fallthrough
+		case .usingExistedCache:
+			queuedRequest = .none
+			requestRowsUpdate(overwriteCurrentTask: false, clearCache: clearCacheRequested)
 		}
 	}
 
